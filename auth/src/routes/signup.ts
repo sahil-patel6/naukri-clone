@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post("/api/users/signup",
   [
-    body('name').isString().isLength({ min: 3 }).withMessage("Name should contain atleast 3 characters"),
+    body('name').isLength({ min: 3 }).withMessage("Name should contain atleast 3 characters"),
     body('email').isEmail().withMessage("Email must be valid"),
     body('role').isIn(["ADMIN", "CANDIDATE", "RECRUITER"]).withMessage("Role must be a valid role"),
     body('password').trim().isLength({ min: 4, max: 20 }).withMessage('Password must be in range 4 and 20 characters')

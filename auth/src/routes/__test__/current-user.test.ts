@@ -12,6 +12,7 @@ it('responds with details about the current user', async () => {
     .expect(200)
 
   expect(response.body.currentUser.email).toEqual("abc@abc.com")
+  expect(response.body.currentUser.name).toEqual("test")
 })
 
 it('responds with null if not authenticated', async () => {
