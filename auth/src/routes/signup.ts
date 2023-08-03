@@ -1,8 +1,10 @@
 import express, { Request, Response } from "express";
 import { body } from 'express-validator';
 import jwt from 'jsonwebtoken';
-import { User, UserRole } from "../models/user";
+import { User } from "../models/user";
 import { BadRequestError, validateRequest } from "@naukri-clone/common";
+import { UserCreatedPublisher } from "../events/publishers/user-created-publisher";
+import { natsWrapper } from "../nats-wrapper";
 const router = express.Router();
 
 router.post("/api/users/signup",
@@ -21,6 +23,7 @@ router.post("/api/users/signup",
     if (existingUser) {
       throw new BadRequestError('Email in use');
     }
+
     const user = User.build({ name, email, password, role })
     await user.save();
 
@@ -36,6 +39,15 @@ router.post("/api/users/signup",
     req.session = {
       jwt: userJwt
     }
+
+    await new UserCreatedPublisher(natsWrapper.client).publish({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      isVerified: user.isVerified,
+      role: user.role,
+    })
+
     res.status(201).json(user)
   }
 )
