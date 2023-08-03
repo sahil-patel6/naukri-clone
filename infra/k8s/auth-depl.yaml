@@ -23,6 +23,35 @@ spec:
               secretKeyRef:
                 name: jwt-secret
                 key: JWT_KEY
+          - name: NATS_CLIENT_ID
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name 
+          - name: NATS_URL
+            value: 'http://nats-srv:4222'
+          - name: NATS_CLUSTER_ID
+            value: naukri-clone
+          - name: EMAIL
+            valueFrom: 
+              secretKeyRef:
+                name: naukri-clone-email
+                key: email
+          - name: CLIENT_ID
+            valueFrom: 
+              secretKeyRef:
+                name: naukri-clone-email-client-id
+                key: email-client-id
+          - name: CLIENT_SECRET
+            valueFrom: 
+              secretKeyRef:
+                name: naukri-clone-email-client-secret
+                key: email-client-secret
+          - name: REFRESH_TOKEN
+            valueFrom: 
+              secretKeyRef:
+                name: naukri-clone-email-refresh-token
+                key: email-refresh-token
+          
 ---
 apiVersion: v1
 kind: Service

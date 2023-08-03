@@ -8,6 +8,8 @@ import { signoutRouter } from './routes/signout'
 import { signupRouter } from './routes/signup'
 
 import { errorHandler, NotFoundError } from '@naukri-clone/common';
+import { sendOTPRouter } from './routes/send-otp';
+import { verifyOTPRouter } from './routes/verfify-otp';
 
 
 const app = express();
@@ -22,6 +24,8 @@ app.use(currentUserRouter);
 app.use(signinRouter);
 app.use(signoutRouter);
 app.use(signupRouter);
+app.use(sendOTPRouter);
+app.use(verifyOTPRouter);
 
 app.all("*", async (req, res, next) => {
   throw new NotFoundError()

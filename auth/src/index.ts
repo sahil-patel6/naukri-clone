@@ -19,6 +19,18 @@ const start = async () => {
   if (!process.env.NATS_CLUSTER_ID) {
     throw new Error('NATS_CLUSTER_ID not found')
   }
+  if (!process.env.EMAIL) {
+    throw new Error('EMAIL not found')
+  }
+  if (!process.env.CLIENT_ID) {
+    throw new Error('CLIENT_ID not found')
+  }
+  if (!process.env.CLIENT_SECRET) {
+    throw new Error('CLIENT_SECRET not found')
+  }
+  if (!process.env.REFRESH_TOKEN) {
+    throw new Error('REFRESH_TOKEN not found')
+  }
   try {
 
     await natsWrapper.connect(process.env.NATS_CLUSTER_ID, process.env.NATS_CLIENT_ID, process.env.NATS_URL)

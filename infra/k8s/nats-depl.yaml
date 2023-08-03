@@ -28,7 +28,7 @@ spec:
             '2',
             '-SD',
             '-cid',
-            'ticketing'
+            'naukri-clone'
           ]
 ---
 apiVersion: v1
