@@ -33,7 +33,7 @@ router.post("/api/users/send-otp",
     });
     await newOTP.save();
 
-    res.status(200).json({ mesage: "OTP sent successfully" })
+    res.status(200).json({ message: "OTP sent successfully" })
   },
 )
 

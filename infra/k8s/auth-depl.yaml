@@ -51,6 +51,11 @@ spec:
               secretKeyRef:
                 name: naukri-clone-email-refresh-token
                 key: email-refresh-token
+          - name: EMAIL_APP_PASSWORD
+            valueFrom: 
+              secretKeyRef:
+                name: naukri-clone-email-app-password
+                key: email-app-password
           
 ---
 apiVersion: v1
