@@ -22,14 +22,8 @@ const start = async () => {
   if (!process.env.EMAIL) {
     throw new Error('EMAIL not found')
   }
-  if (!process.env.CLIENT_ID) {
-    throw new Error('CLIENT_ID not found')
-  }
-  if (!process.env.CLIENT_SECRET) {
-    throw new Error('CLIENT_SECRET not found')
-  }
-  if (!process.env.REFRESH_TOKEN) {
-    throw new Error('REFRESH_TOKEN not found')
+  if (!process.env.EMAIL_APP_PASSWORD) {
+    throw new Error('EMAIL_APP_PASSWORD not found')
   }
   try {
 

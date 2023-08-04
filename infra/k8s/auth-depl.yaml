@@ -36,21 +36,6 @@ spec:
               secretKeyRef:
                 name: naukri-clone-email
                 key: email
-          - name: CLIENT_ID
-            valueFrom: 
-              secretKeyRef:
-                name: naukri-clone-email-client-id
-                key: email-client-id
-          - name: CLIENT_SECRET
-            valueFrom: 
-              secretKeyRef:
-                name: naukri-clone-email-client-secret
-                key: email-client-secret
-          - name: REFRESH_TOKEN
-            valueFrom: 
-              secretKeyRef:
-                name: naukri-clone-email-refresh-token
-                key: email-refresh-token
           - name: EMAIL_APP_PASSWORD
             valueFrom: 
               secretKeyRef:
