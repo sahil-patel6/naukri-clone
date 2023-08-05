@@ -36,7 +36,8 @@ router.post("/api/users/verify-otp",
     await user.save();
 
     await new UserVerifiedPublisher(natsWrapper.client).publish({
-      id: user.id
+      id: user.id,
+      role: user.role,
     })
 
     res.status(200).json({ mesage: "Email verified Successfully" })
