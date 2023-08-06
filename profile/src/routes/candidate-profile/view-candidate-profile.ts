@@ -3,21 +3,21 @@ import express, { Request, Response } from "express";
 import { checkIfProfileExistsandEmailIsVerified } from "../../middlewares/check-if-email-verified";
 const router = express.Router();
 
-router.get("/api/profile/recruiter-profile/",
+router.get("/api/profile/candidate-profile/",
   currentUser,
   requireAuth,
   checkIfProfileExistsandEmailIsVerified,
   async (req: Request, res: Response) => {
 
-    if (!req.recruiterProfile) {
+    if (!req.candidateProfile) {
       throw new Error('Something went wrong')
     }
 
-    res.send(req.recruiterProfile);
+    res.send(req.candidateProfile);
 
   }
 )
 
 export {
-  router as viewRecruiterProfileRouter
+  router as viewCandidateProfileRouter
 }

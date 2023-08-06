@@ -49,6 +49,7 @@ router.put("/api/profile/recruiter-profile/",
 
     await req.recruiterProfile.save();
 
+    // this publisher is for auth service in case user updates its email or name
     await new UserUpdatedPublisher(natsWrapper.client).publish({
       id: req.recruiterProfile.user_id,
       email: req.recruiterProfile.email,
@@ -79,5 +80,5 @@ router.put("/api/profile/recruiter-profile/",
 )
 
 export {
-  router as updateCandidateProfileRouter
+  router as updateRecruiterProfileRouter
 }

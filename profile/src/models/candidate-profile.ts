@@ -10,15 +10,16 @@ interface CandidateProfileAttrs {
   isVerified: boolean;
   profile_image?: string;
   bio?: string;
-  dob?: Date;
+  dob?: string;
   gender?: Gender;
   current_location?: string;
+  preferred_work_location?: string;
   key_skills?: [string];
   resume?: string;
-  language?: [Language];
+  languages?: [Language];
   social_links?: SocialLinks;
-  work_experience?: [WorkExperience];
-  education?: [Education];
+  work_experiences?: [WorkExperience];
+  educations?: [Education];
   courses_and_certifications?: [CoursesAndCertification];
   projects?: [Project],
 }
@@ -36,18 +37,19 @@ export interface CandidateProfileDoc extends mongoose.Document {
   isVerified: boolean;
   profile_image?: string;
   bio?: string;
-  dob?: Date;
+  dob?: string;
   gender?: Gender;
   current_location?: string;
+  preferred_work_location?: string;
   key_skills?: [string];
   resume?: string;
-  language?: [Language];
+  languages?: [Language];
   social_links?: SocialLinks;
-  work_experience?: [WorkExperience];
-  education?: [Education];
+  work_experiences?: [WorkExperience];
+  educations?: [Education];
   courses_and_certifications?: [CoursesAndCertification];
   projects?: [Project],
-  version: string;
+  version: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -89,6 +91,9 @@ const candidateProfileSchema = new mongoose.Schema({
   current_location: {
     type: String
   },
+  preferred_work_location: {
+    type: String
+  },
   key_skills: {
     type: Array<String>,
     default: []
@@ -99,29 +104,36 @@ const candidateProfileSchema = new mongoose.Schema({
   marital_status: {
     type: String
   },
-  language: [{
-    language_name: {
-      type: String,
-      required: true
-    },
-    proficiency: {
-      type: String,
-      required: true,
-      enum: ['Beginner', 'Proficient', 'Expert'],
-    },
-    read: {
-      type: Boolean,
-      required: true
-    },
-    write: {
-      type: Boolean,
-      required: true
-    },
-    speak: {
-      type: Boolean,
-      required: true
-    }
-  }],
+  languages: {
+    type: [{
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: mongoose.Types.ObjectId
+      },
+      language_name: {
+        type: String,
+        required: true
+      },
+      proficiency: {
+        type: String,
+        required: true,
+        enum: ['Beginner', 'Proficient', 'Expert'],
+      },
+      read: {
+        type: Boolean,
+        required: true
+      },
+      write: {
+        type: Boolean,
+        required: true
+      },
+      speak: {
+        type: Boolean,
+        required: true
+      }
+    }],
+    default: []
+  },
   social_links: {
     instagram: {
       type: String,
@@ -144,104 +156,116 @@ const candidateProfileSchema = new mongoose.Schema({
       default: null
     }
   },
-  work_experience: [{
-    _id: {
-      type: mongoose.Schema.Types.ObjectId,
-      default: mongoose.Types.ObjectId
-    },
-    designation: {
-      type: String,
-      required: true
-    },
-    company_name: {
-      type: String,
-      required: true
-    },
-    location: {
-      type: String,
-      required: true
-    },
-    current_status: {
-      type: Boolean,
-      required: true,
-    },
-    start_date: {
-      type: Date,
-      required: true,
-    },
-    end_date: {
-      type: Date,
-    },
-    notice_period: {
-      type: String,
-      enum: ['Serving Notice Period', 'Immediately available', '15 Days', '30 days', 'More than 30 days'],
-    },
-    job_description: {
-      type: String,
-      required: true
-    }
-  }],
-  education: [{
-    _id: {
-      type: mongoose.Schema.Types.ObjectId,
-      default: mongoose.Types.ObjectId
-    },
-    course: {
-      type: String,
-      required: true
-    },
-    start_date: {
-      type: Date,
-      required: true
-    },
-    end_date: {
-      type: Date,
-    },
-    institute: {
-      type: String,
-      required: true
-    }
-  }],
-  courses_and_certifications: [{
-    _id: {
-      type: mongoose.Schema.Types.ObjectId,
-      default: mongoose.Types.ObjectId
-    },
-    name: {
-      type: String,
-      required: true
-    },
-    description: {
-      type: String,
-      required: true
-    },
-    url: {
-      type: String,
-      required: true,
-    },
-    issued_by: {
-      type: String,
-      required: true
-    }
-  }],
-  projects: [{
-    _id: {
-      type: mongoose.Schema.Types.ObjectId,
-      default: mongoose.Types.ObjectId
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    project_status: {
-      type: String,
-      required: true
-    },
-    description: {
-      type: String,
-      required: true
-    }
-  }]
+  work_experiences: {
+    type: [{
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: mongoose.Types.ObjectId
+      },
+      designation: {
+        type: String,
+        required: true
+      },
+      company_name: {
+        type: String,
+        required: true
+      },
+      location: {
+        type: String,
+        required: true
+      },
+      current_status: {
+        type: Boolean,
+        required: true,
+      },
+      start_date: {
+        type: Date,
+        required: true,
+      },
+      end_date: {
+        type: Date,
+      },
+      notice_period: {
+        type: String,
+        enum: ['Serving Notice Period', 'Immediately available', '15 Days', '30 days', 'More than 30 days'],
+      },
+      job_description: {
+        type: String,
+        required: true
+      }
+    }],
+    default: []
+  },
+  educations: {
+    type: [{
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: mongoose.Types.ObjectId
+      },
+      course: {
+        type: String,
+        required: true
+      },
+      start_date: {
+        type: Date,
+        required: true
+      },
+      end_date: {
+        type: Date,
+      },
+      institute: {
+        type: String,
+        required: true
+      }
+    }],
+    default: []
+  },
+  courses_and_certifications: {
+    type: [{
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: mongoose.Types.ObjectId
+      },
+      name: {
+        type: String,
+        required: true
+      },
+      description: {
+        type: String,
+        required: true
+      },
+      url: {
+        type: String,
+        required: true,
+      },
+      issued_by: {
+        type: String,
+        required: true
+      }
+    }],
+    default: []
+  },
+  projects: {
+    type: [{
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: mongoose.Types.ObjectId
+      },
+      title: {
+        type: String,
+        required: true
+      },
+      project_status: {
+        type: String,
+        required: true
+      },
+      description: {
+        type: String,
+        required: true
+      }
+    }],
+    default: []
+  }
 }, {
   timestamps: true,
   toJSON: {
