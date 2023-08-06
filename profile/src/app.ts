@@ -5,8 +5,9 @@ import 'express-async-errors';
 import { errorHandler, NotFoundError } from '@naukri-clone/common';
 import { updateRecruiterProfileRouter } from './routes/recruiter-profile/update-recruiter-profile';
 import { viewRecruiterProfileRouter } from './routes/recruiter-profile/view-recruiter-profile';
-import { updateBasicInfoCandidateProfileRouter } from './routes/candidate-profile/update-basic-info-candidate-profile';
+import { addBasicInfoCandidateProfileRouter } from './routes/candidate-profile/basic-info-candidate-profile';
 import { viewCandidateProfileRouter } from './routes/candidate-profile/view-candidate-profile';
+import { languageCandidateProfileRouter } from './routes/candidate-profile/languages-candidate-profile';
 
 
 const app = express();
@@ -20,8 +21,9 @@ app.use(cookieSession({
 app.use(updateRecruiterProfileRouter)
 app.use(viewRecruiterProfileRouter)
 
-app.use(updateBasicInfoCandidateProfileRouter);
 app.use(viewCandidateProfileRouter);
+app.use(addBasicInfoCandidateProfileRouter);
+app.use(languageCandidateProfileRouter)
 
 app.all("*", async (req, res, next) => {
   throw new NotFoundError()

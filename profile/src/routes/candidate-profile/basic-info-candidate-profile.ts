@@ -8,7 +8,7 @@ import { checkIfProfileExistsandEmailIsVerified } from "../../middlewares/check-
 import { CandidateProfileUpdatedPublisher } from "../../events/publishers/candidate-profile-updated-publisher";
 const router = express.Router();
 
-router.put("/api/profile/recruiter-profile/basic-info",
+router.post("/api/profile/candidate-profile/basic-info",
   currentUser,
   requireAuth,
   checkIfProfileExistsandEmailIsVerified,
@@ -78,5 +78,5 @@ router.put("/api/profile/recruiter-profile/basic-info",
 )
 
 export {
-  router as updateBasicInfoCandidateProfileRouter
+  router as addBasicInfoCandidateProfileRouter
 }

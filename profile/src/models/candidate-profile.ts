@@ -59,7 +59,7 @@ const candidateProfileSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  userId: {
+  user_id: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
@@ -106,10 +106,6 @@ const candidateProfileSchema = new mongoose.Schema({
   },
   languages: {
     type: [{
-      id: {
-        type: mongoose.Schema.Types.ObjectId,
-        default: mongoose.Types.ObjectId
-      },
       language_name: {
         type: String,
         required: true
@@ -158,10 +154,6 @@ const candidateProfileSchema = new mongoose.Schema({
   },
   work_experiences: {
     type: [{
-      id: {
-        type: mongoose.Schema.Types.ObjectId,
-        default: mongoose.Types.ObjectId
-      },
       designation: {
         type: String,
         required: true
@@ -198,10 +190,6 @@ const candidateProfileSchema = new mongoose.Schema({
   },
   educations: {
     type: [{
-      id: {
-        type: mongoose.Schema.Types.ObjectId,
-        default: mongoose.Types.ObjectId
-      },
       course: {
         type: String,
         required: true
@@ -222,10 +210,6 @@ const candidateProfileSchema = new mongoose.Schema({
   },
   courses_and_certifications: {
     type: [{
-      id: {
-        type: mongoose.Schema.Types.ObjectId,
-        default: mongoose.Types.ObjectId
-      },
       name: {
         type: String,
         required: true
@@ -247,10 +231,6 @@ const candidateProfileSchema = new mongoose.Schema({
   },
   projects: {
     type: [{
-      id: {
-        type: mongoose.Schema.Types.ObjectId,
-        default: mongoose.Types.ObjectId
-      },
       title: {
         type: String,
         required: true
@@ -274,6 +254,26 @@ const candidateProfileSchema = new mongoose.Schema({
       delete ret._id;
       delete ret.createdAt;
       delete ret.updatedAt;
+      ret.languages.forEach((lan: any) => {
+        lan.id = lan._id;
+        delete lan._id;
+      })
+      ret.work_experiences.forEach((work_experience: any) => {
+        work_experience.id = work_experience._id;
+        delete work_experience._id;
+      })
+      ret.educations.forEach((education: any) => {
+        education.id = education._id;
+        delete education._id;
+      })
+      ret.courses_and_certifications.forEach((course: any) => {
+        course.id = course._id;
+        delete course._id;
+      })
+      ret.projects.forEach((project: any) => {
+        project.id = project._id;
+        delete project._id;
+      })
     }
   }
 })
