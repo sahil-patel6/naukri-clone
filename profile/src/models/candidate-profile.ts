@@ -9,7 +9,6 @@ interface CandidateProfileAttrs {
   phone_number?: string;
   isVerified: boolean;
   profile_image?: string;
-  about?: string;
   bio?: string;
   dob?: Date;
   gender?: Gender;
@@ -29,14 +28,13 @@ interface CandidateProfileModel extends mongoose.Model<CandidateProfileDoc> {
   build(attrs: CandidateProfileAttrs): CandidateProfileDoc;
 }
 
-interface CandidateProfileDoc extends mongoose.Document {
+export interface CandidateProfileDoc extends mongoose.Document {
   user_id: string;
   name: string;
   email: string;
   phone_number?: string;
   isVerified: boolean;
   profile_image?: string;
-  about?: string;
   bio?: string;
   dob?: Date;
   gender?: Gender;
@@ -49,6 +47,7 @@ interface CandidateProfileDoc extends mongoose.Document {
   education?: [Education];
   courses_and_certifications?: [CoursesAndCertification];
   projects?: [Project],
+  version: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -76,9 +75,6 @@ const candidateProfileSchema = new mongoose.Schema({
   },
   profile_image: {
     type: String,
-  },
-  about: {
-    type: String
   },
   bio: {
     type: String
@@ -206,7 +202,7 @@ const candidateProfileSchema = new mongoose.Schema({
       required: true
     }
   }],
-  courseAnd_certification: [{
+  courses_and_certifications: [{
     _id: {
       type: mongoose.Schema.Types.ObjectId,
       default: mongoose.Types.ObjectId
@@ -252,7 +248,6 @@ const candidateProfileSchema = new mongoose.Schema({
     transform(doc, ret) {
       ret.id = ret._id;
       delete ret._id;
-      delete ret.__v;
       delete ret.createdAt;
       delete ret.updatedAt;
     }

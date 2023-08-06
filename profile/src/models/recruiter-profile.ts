@@ -22,7 +22,7 @@ interface RecruiterProfileModel extends mongoose.Model<RecruiterProfileDoc> {
   build(attrs: RecruiterProfileAttrs): RecruiterProfileDoc;
 }
 
-interface RecruiterProfileDoc extends mongoose.Document {
+export interface RecruiterProfileDoc extends mongoose.Document {
   user_id:string;
   name: string;
   email: string;
@@ -36,6 +36,7 @@ interface RecruiterProfileDoc extends mongoose.Document {
   company_email?: string;
   company_address?: string;
   company_description?: string;
+  version: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -91,7 +92,6 @@ const recruiterProfileSchema = new mongoose.Schema({
     transform(doc, ret) {
       ret.id = ret._id;
       delete ret._id;
-      delete ret.__v;
       delete ret.createdAt;
       delete ret.updatedAt;
     }

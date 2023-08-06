@@ -11,6 +11,7 @@ const start = async () => {
   if (!process.env.MONGO_URI) {
     throw new Error('MONGO_URI not found')
   }
+  // NATS
   if (!process.env.NATS_CLIENT_ID) {
     throw new Error('NATS_CLIENT_ID not found')
   }
@@ -19,6 +20,16 @@ const start = async () => {
   }
   if (!process.env.NATS_CLUSTER_ID) {
     throw new Error('NATS_CLUSTER_ID not found')
+  }
+  // CLOUDINARY
+  if (!process.env.CLOUDINARY_CLOUD_NAME) {
+    throw new Error('CLOUDINARY_CLOUD_NAME not found')
+  }
+  if (!process.env.CLOUDINARY_API_KEY) {
+    throw new Error('CLOUDINARY_API_KEY not found')
+  }
+  if (!process.env.CLOUDINARY_API_SECRET) {
+    throw new Error('CLOUDINARY_API_SECRET not found')
   }
 
   try {
@@ -44,7 +55,7 @@ const start = async () => {
   }
 
   app.listen(3000, () => {
-    console.log('Auth Service listening on port 3000')
+    console.log('Profile Service listening on port 3000')
   })
 }
 
