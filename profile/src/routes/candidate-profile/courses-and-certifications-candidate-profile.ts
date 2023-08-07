@@ -6,16 +6,15 @@ import { checkIfProfileExistsandEmailIsVerified } from "../../middlewares/check-
 import { CandidateProfileUpdatedPublisher } from "../../events/publishers/candidate-profile-updated-publisher";
 const router = express.Router();
 
-router.post("/api/profile/candidate-profile/languages",
+router.post("/api/profile/candidate-profile/courses-and-certifications",
   currentUser,
   requireAuth,
   checkIfProfileExistsandEmailIsVerified,
   [
-    body('language_name').isString().withMessage("Language should not be empty"),
-    body('proficiency').isIn(['Beginner', 'Proficient', 'Expert']).withMessage("Proficiency can only contain ['Beginner', 'Proficient', 'Expert']"),
-    body('read').isBoolean().withMessage("Read must be a boolean value"),
-    body('write').isBoolean().withMessage('Write must be a boolean value'),
-    body('speak').isBoolean().withMessage('Speak must be a boolean value'),
+    body('name').isLength({ min: 3 }).withMessage("Name should not be empty"),
+    body('description').isLength({ min: 3 }).withMessage("Description should not be empty"),
+    body('url').isURL().withMessage('URL should be valid'),
+    body('issued_by').isLength({ min: 3 }).withMessage("Issued By should not be empty"),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -24,7 +23,7 @@ router.post("/api/profile/candidate-profile/languages",
       throw new Error('Something went wrong')
     }
 
-    req.candidateProfile.languages?.push(req.body);
+    req.candidateProfile.courses_and_certifications?.push(req.body);
     await req.candidateProfile.save();
 
     await new CandidateProfileUpdatedPublisher(natsWrapper.client).publish({
@@ -33,7 +32,7 @@ router.post("/api/profile/candidate-profile/languages",
       email: req.candidateProfile.email,
       user_id: req.candidateProfile.user_id,
       version: req.candidateProfile.version,
-      languages: req.candidateProfile.languages
+      courses_and_certifications: req.candidateProfile.courses_and_certifications
     })
 
     res.send(req.candidateProfile);
@@ -41,17 +40,16 @@ router.post("/api/profile/candidate-profile/languages",
   }
 )
 
-router.put("/api/profile/candidate-profile/languages/:id",
+router.put("/api/profile/candidate-profile/courses-and-certifications/:id",
   currentUser,
   requireAuth,
   checkIfProfileExistsandEmailIsVerified,
   param("id").isMongoId().withMessage("Please send a valid id"),
   [
-    body('language_name').isString().withMessage("Language should not be empty"),
-    body('proficiency').isIn(['Beginner', 'Proficient', 'Expert']).withMessage("Proficiency can only contain ['Beginner', 'Proficient', 'Expert']"),
-    body('read').isBoolean().withMessage("Read must be a boolean value"),
-    body('write').isBoolean().withMessage('Write must be a boolean value'),
-    body('speak').isBoolean().withMessage('Speak must be a boolean value'),
+    body('name').isLength({ min: 3 }).withMessage("Name should not be empty"),
+    body('description').isLength({ min: 3 }).withMessage("Description should not be empty"),
+    body('url').isURL().withMessage('URL should be valid'),
+    body('issued_by').isLength({ min: 3 }).withMessage("Issued By should not be empty"),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -60,17 +58,16 @@ router.put("/api/profile/candidate-profile/languages/:id",
       throw new Error('Something went wrong')
     }
 
-    const language = req.candidateProfile.languages?.find((l) => l.id === req.params.id)
+    const course_and_certificate = req.candidateProfile.courses_and_certifications?.find((c) => c.id === req.params.id)
 
-    if (!language) {
-      throw new BadRequestError("Language not found")
+    if (!course_and_certificate) {
+      throw new BadRequestError("Course and Certification not found")
     }
 
-    language.language_name = req.body.language_name;
-    language.proficiency = req.body.proficiency;
-    language.read = req.body.read;
-    language.write = req.body.write;
-    language.speak = req.body.speak;
+    course_and_certificate.name = req.body.name;
+    course_and_certificate.description = req.body.description;
+    course_and_certificate.url = req.body.url;
+    course_and_certificate.issued_by = req.body.issued_by;
 
     await req.candidateProfile.save();
 
@@ -80,7 +77,7 @@ router.put("/api/profile/candidate-profile/languages/:id",
       email: req.candidateProfile.email,
       user_id: req.candidateProfile.user_id,
       version: req.candidateProfile.version,
-      languages: req.candidateProfile.languages
+      courses_and_certifications: req.candidateProfile.courses_and_certifications
     })
 
     res.send(req.candidateProfile);
@@ -88,7 +85,7 @@ router.put("/api/profile/candidate-profile/languages/:id",
   }
 )
 
-router.delete("/api/profile/candidate-profile/languages/:id",
+router.delete("/api/profile/candidate-profile/courses-and-certifications/:id",
   currentUser,
   requireAuth,
   param('id').isMongoId().withMessage("Please send a valid id"),
@@ -98,16 +95,16 @@ router.delete("/api/profile/candidate-profile/languages/:id",
     if (!req.candidateProfile) {
       throw new Error('Something went wrong')
     }
+    
+    const course_and_certificate = req.candidateProfile.courses_and_certifications?.find((c) => c.id === req.params.id)
 
-    const language = req.candidateProfile.languages?.find((l) => l.id === req.params.id)
-
-    if (!language) {
-      throw new BadRequestError("Language not found")
+    if (!course_and_certificate) {
+      throw new BadRequestError("Course and Certification not found")
     }
 
-    const languages = req.candidateProfile.languages?.filter(lan => lan.id != req.params.id);
+    const courses_and_certifications = req.candidateProfile.courses_and_certifications?.filter(coruse_and_certificate => coruse_and_certificate.id != req.params.id);
     // @ts-ignore
-    req.candidateProfile.languages = languages;
+    req.candidateProfile.courses_and_certifications = courses_and_certifications;
     await req.candidateProfile.save();
 
     await new CandidateProfileUpdatedPublisher(natsWrapper.client).publish({
@@ -116,7 +113,7 @@ router.delete("/api/profile/candidate-profile/languages/:id",
       email: req.candidateProfile.email,
       user_id: req.candidateProfile.user_id,
       version: req.candidateProfile.version,
-      languages: req.candidateProfile.languages
+      courses_and_certifications: req.candidateProfile.courses_and_certifications
     })
 
     res.send(req.candidateProfile);
@@ -125,5 +122,5 @@ router.delete("/api/profile/candidate-profile/languages/:id",
 )
 
 export {
-  router as languageCandidateProfileRouter
+  router as coursesAndCertificationsCandidateProfileRouter
 }

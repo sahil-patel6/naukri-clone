@@ -1,4 +1,4 @@
-import { currentUser, requireAuth, validateRequest } from "@naukri-clone/common";
+import { BadRequestError, currentUser, requireAuth, validateRequest } from "@naukri-clone/common";
 import express, { Request, Response } from "express";
 import { body, param } from 'express-validator';
 import { natsWrapper } from "../../nats-wrapper";
@@ -6,7 +6,7 @@ import { checkIfProfileExistsandEmailIsVerified } from "../../middlewares/check-
 import { CandidateProfileUpdatedPublisher } from "../../events/publishers/candidate-profile-updated-publisher";
 const router = express.Router();
 
-router.post("/api/profile/candidate-profile/work-experience/add",
+router.post("/api/profile/candidate-profile/work-experience/",
   currentUser,
   requireAuth,
   checkIfProfileExistsandEmailIsVerified,
@@ -66,24 +66,25 @@ router.put("/api/profile/candidate-profile/work-experience/:id",
       throw new Error('Something went wrong')
     }
 
-    for (let work_experience of req.candidateProfile.work_experiences!) {
-      if (work_experience.id == req.params.id) {
-        work_experience.company_name = req.body.company_name;
-        work_experience.designation = req.body.designation;
-        work_experience.location = req.body.location;
-        work_experience.current_working_status = req.body.current_working_status;
-        work_experience.job_description = req.body.job_description;
-        work_experience.start_date = req.body.start_date;
-        // only add end_date if current working status is false and it exists in req.body
-        if (req.body.end_date && !req.body.current_working_status) {
-          work_experience.end_date = req.body.end_date;
-        }
-        // only add notice_period if current working status is true and it exists in req.body
-        if (req.body.notice_period && req.body.current_working_status) {
-          work_experience.notice_period = req.body.notice_period;
-        }
-        break;
-      }
+    const work_experience = req.candidateProfile.work_experiences?.find((w) => w.id === req.params.id)
+
+    if (!work_experience) {
+      throw new BadRequestError("Work Experience not found")
+    }
+
+    work_experience.company_name = req.body.company_name;
+    work_experience.designation = req.body.designation;
+    work_experience.location = req.body.location;
+    work_experience.current_working_status = req.body.current_working_status;
+    work_experience.job_description = req.body.job_description;
+    work_experience.start_date = req.body.start_date;
+    // only add end_date if current working status is false and it exists in req.body
+    if (req.body.end_date && !req.body.current_working_status) {
+      work_experience.end_date = req.body.end_date;
+    }
+    // only add notice_period if current working status is true and it exists in req.body
+    if (req.body.notice_period && req.body.current_working_status) {
+      work_experience.notice_period = req.body.notice_period;
     }
 
     await req.candidateProfile.save();
@@ -111,6 +112,12 @@ router.delete("/api/profile/candidate-profile/work-experience/:id",
 
     if (!req.candidateProfile) {
       throw new Error('Something went wrong')
+    }
+    
+    const work_experience = req.candidateProfile.work_experiences?.find((w) => w.id === req.params.id)
+
+    if (!work_experience) {
+      throw new BadRequestError("Work Experience not found")
     }
 
     const work_experiences = req.candidateProfile.work_experiences?.filter(work_experience => work_experience.id != req.params.id);

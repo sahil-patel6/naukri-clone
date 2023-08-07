@@ -1,4 +1,4 @@
-import { currentUser, requireAuth, validateRequest } from "@naukri-clone/common";
+import { BadRequestError, currentUser, requireAuth, validateRequest } from "@naukri-clone/common";
 import express, { Request, Response } from "express";
 import { body, param } from 'express-validator';
 import { natsWrapper } from "../../nats-wrapper";
@@ -6,7 +6,7 @@ import { checkIfProfileExistsandEmailIsVerified } from "../../middlewares/check-
 import { CandidateProfileUpdatedPublisher } from "../../events/publishers/candidate-profile-updated-publisher";
 const router = express.Router();
 
-router.post("/api/profile/candidate-profile/education/add",
+router.post("/api/profile/candidate-profile/education",
   currentUser,
   requireAuth,
   checkIfProfileExistsandEmailIsVerified,
@@ -58,17 +58,18 @@ router.put("/api/profile/candidate-profile/education/:id",
       throw new Error('Something went wrong')
     }
 
-    for (let education of req.candidateProfile.educations!) {
-      if (education.id == req.params.id) {
-        education.course = req.body.course;
-        education.institute = req.body.institute;
-        education.start_date = req.body.start_date;
-        // only add end_date if it exists in req.body
-        if (req.body.end_date) {
-          education.end_date = req.body.end_date;
-        }
-        break;
-      }
+    const education = req.candidateProfile.educations?.find((e) => e.id === req.params.id)
+
+    if (!education) {
+      throw new BadRequestError("Education not found")
+    }
+
+    education.course = req.body.course;
+    education.institute = req.body.institute;
+    education.start_date = req.body.start_date;
+    // only add end_date if it exists in req.body
+    if (req.body.end_date) {
+      education.end_date = req.body.end_date;
     }
 
     await req.candidateProfile.save();
@@ -96,6 +97,12 @@ router.delete("/api/profile/candidate-profile/education/:id",
 
     if (!req.candidateProfile) {
       throw new Error('Something went wrong')
+    }
+
+    const education = req.candidateProfile.educations?.find((e) => e.id === req.params.id)
+
+    if (!education) {
+      throw new BadRequestError("Education not found")
     }
 
     const educations = req.candidateProfile.educations?.filter(education => education.id != req.params.id);

@@ -6,16 +6,14 @@ import { checkIfProfileExistsandEmailIsVerified } from "../../middlewares/check-
 import { CandidateProfileUpdatedPublisher } from "../../events/publishers/candidate-profile-updated-publisher";
 const router = express.Router();
 
-router.post("/api/profile/candidate-profile/languages",
+router.post("/api/profile/candidate-profile/projects",
   currentUser,
   requireAuth,
   checkIfProfileExistsandEmailIsVerified,
   [
-    body('language_name').isString().withMessage("Language should not be empty"),
-    body('proficiency').isIn(['Beginner', 'Proficient', 'Expert']).withMessage("Proficiency can only contain ['Beginner', 'Proficient', 'Expert']"),
-    body('read').isBoolean().withMessage("Read must be a boolean value"),
-    body('write').isBoolean().withMessage('Write must be a boolean value'),
-    body('speak').isBoolean().withMessage('Speak must be a boolean value'),
+    body('title').isLength({ min: 3 }).withMessage("Title should not be empty"),
+    body('description').isLength({ min: 3 }).withMessage("Description should not be empty"),
+    body('project_status').isBoolean().withMessage('Project Status should be boolean value'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -24,7 +22,7 @@ router.post("/api/profile/candidate-profile/languages",
       throw new Error('Something went wrong')
     }
 
-    req.candidateProfile.languages?.push(req.body);
+    req.candidateProfile.projects?.push(req.body);
     await req.candidateProfile.save();
 
     await new CandidateProfileUpdatedPublisher(natsWrapper.client).publish({
@@ -33,7 +31,7 @@ router.post("/api/profile/candidate-profile/languages",
       email: req.candidateProfile.email,
       user_id: req.candidateProfile.user_id,
       version: req.candidateProfile.version,
-      languages: req.candidateProfile.languages
+      projects: req.candidateProfile.projects
     })
 
     res.send(req.candidateProfile);
@@ -41,17 +39,15 @@ router.post("/api/profile/candidate-profile/languages",
   }
 )
 
-router.put("/api/profile/candidate-profile/languages/:id",
+router.put("/api/profile/candidate-profile/projects/:id",
   currentUser,
   requireAuth,
   checkIfProfileExistsandEmailIsVerified,
   param("id").isMongoId().withMessage("Please send a valid id"),
   [
-    body('language_name').isString().withMessage("Language should not be empty"),
-    body('proficiency').isIn(['Beginner', 'Proficient', 'Expert']).withMessage("Proficiency can only contain ['Beginner', 'Proficient', 'Expert']"),
-    body('read').isBoolean().withMessage("Read must be a boolean value"),
-    body('write').isBoolean().withMessage('Write must be a boolean value'),
-    body('speak').isBoolean().withMessage('Speak must be a boolean value'),
+    body('title').isLength({ min: 3 }).withMessage("Title should not be empty"),
+    body('description').isLength({ min: 3 }).withMessage("Description should not be empty"),
+    body('project_status').isBoolean().withMessage('Project Status should be boolean value'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -60,17 +56,15 @@ router.put("/api/profile/candidate-profile/languages/:id",
       throw new Error('Something went wrong')
     }
 
-    const language = req.candidateProfile.languages?.find((l) => l.id === req.params.id)
+    const project = req.candidateProfile.projects?.find((p) => p.id === req.params.id)
 
-    if (!language) {
-      throw new BadRequestError("Language not found")
+    if (!project) {
+      throw new BadRequestError("Project not found")
     }
 
-    language.language_name = req.body.language_name;
-    language.proficiency = req.body.proficiency;
-    language.read = req.body.read;
-    language.write = req.body.write;
-    language.speak = req.body.speak;
+    project.title = req.body.title;
+    project.description = req.body.description;
+    project.project_status = req.body.project_status;
 
     await req.candidateProfile.save();
 
@@ -80,7 +74,7 @@ router.put("/api/profile/candidate-profile/languages/:id",
       email: req.candidateProfile.email,
       user_id: req.candidateProfile.user_id,
       version: req.candidateProfile.version,
-      languages: req.candidateProfile.languages
+      projects: req.candidateProfile.projects
     })
 
     res.send(req.candidateProfile);
@@ -88,7 +82,7 @@ router.put("/api/profile/candidate-profile/languages/:id",
   }
 )
 
-router.delete("/api/profile/candidate-profile/languages/:id",
+router.delete("/api/profile/candidate-profile/projects/:id",
   currentUser,
   requireAuth,
   param('id').isMongoId().withMessage("Please send a valid id"),
@@ -99,15 +93,15 @@ router.delete("/api/profile/candidate-profile/languages/:id",
       throw new Error('Something went wrong')
     }
 
-    const language = req.candidateProfile.languages?.find((l) => l.id === req.params.id)
+    const project = req.candidateProfile.projects?.find((p) => p.id === req.params.id)
 
-    if (!language) {
-      throw new BadRequestError("Language not found")
+    if (!project) {
+      throw new BadRequestError("Project not found")
     }
 
-    const languages = req.candidateProfile.languages?.filter(lan => lan.id != req.params.id);
+    const projects = req.candidateProfile.projects?.filter(project => project.id != req.params.id);
     // @ts-ignore
-    req.candidateProfile.languages = languages;
+    req.candidateProfile.projects = projects;
     await req.candidateProfile.save();
 
     await new CandidateProfileUpdatedPublisher(natsWrapper.client).publish({
@@ -116,7 +110,7 @@ router.delete("/api/profile/candidate-profile/languages/:id",
       email: req.candidateProfile.email,
       user_id: req.candidateProfile.user_id,
       version: req.candidateProfile.version,
-      languages: req.candidateProfile.languages
+      projects: req.candidateProfile.projects
     })
 
     res.send(req.candidateProfile);
@@ -125,5 +119,5 @@ router.delete("/api/profile/candidate-profile/languages/:id",
 )
 
 export {
-  router as languageCandidateProfileRouter
+  router as projectsCandidateProfileRouter
 }
