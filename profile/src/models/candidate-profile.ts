@@ -81,7 +81,7 @@ const candidateProfileSchema = new mongoose.Schema({
   bio: {
     type: String
   },
-  date_of_birth: {
+  dob: {
     type: Date
   },
   gender: {

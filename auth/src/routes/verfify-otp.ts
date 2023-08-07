@@ -40,7 +40,7 @@ router.post("/api/users/verify-otp",
       role: user.role,
     })
 
-    res.status(200).json({ mesage: "Email verified Successfully" })
+    res.status(200).json({ message: "Email verified Successfully" })
   },
 )
 

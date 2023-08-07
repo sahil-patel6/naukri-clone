@@ -32,9 +32,9 @@ router.post("/api/profile/candidate-profile/basic-info",
     }
 
     //@ts-ignore
-    const profileImagePath = req.files['profile_image'] ? req.files['profile_image'][0].path : null;
+    const profileImagePath = req.files && req.files['profile_image'] ? req.files['profile_image'][0].path : null;
     // @ts-ignore
-    const resumePath = req.files['resume'] ? req.files['resume'][0].path : null;
+    const resumePath = req.files && req.files['resume'] ? req.files['resume'][0].path : null;
     console.log(profileImagePath, resumePath);
 
     req.candidateProfile.name = req.body.name;
@@ -43,7 +43,7 @@ router.post("/api/profile/candidate-profile/basic-info",
     req.candidateProfile.profile_image = profileImagePath != null ? profileImagePath : req.candidateProfile.profile_image;
     req.candidateProfile.resume = resumePath != null ? resumePath : req.candidateProfile.resume;
     req.candidateProfile.bio = req.body.bio;
-    req.candidateProfile.dob = req.body.dob;
+    req.candidateProfile.dob = new Date(req.body.dob).toISOString();
     req.candidateProfile.gender = req.body.gender;
     req.candidateProfile.current_location = req.body.current_location;
     req.candidateProfile.preferred_work_location = req.body.preferred_work_location;

@@ -18,6 +18,7 @@ router.post("/api/users/send-otp",
       throw new BadRequestError('Invalid Credentials');
     }
     const otp = Math.floor(100000 + Math.random() * 900000);
+    
     const mailOptions = {
       from: process.env.EMAIL,
       to: user.email,

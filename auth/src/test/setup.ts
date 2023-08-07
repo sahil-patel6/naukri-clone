@@ -8,10 +8,13 @@ declare global {
 }
 
 jest.mock('../nats-wrapper')
+jest.mock('../utils/email')
 
 let mongo: any;
 beforeAll(async () => {
   process.env.JWT_KEY = 'asdf'
+  process.env.EMAIL = 'saurabmia'
+  // process.env.EMAIL_APP_PASSWORD = process.env.JWT_KEY
   mongo = await MongoMemoryServer.create();
   const mongoUri = mongo.getUri();
   await mongoose.connect(mongoUri, {});

@@ -16,7 +16,7 @@ const createTransporter = async () => {
 
 const sendEmail = async (emailOptions: Mail.Options) => {
   let emailTransporter = await createTransporter();
-  await emailTransporter.sendMail(emailOptions, function (error, info) {
+  emailTransporter.sendMail(emailOptions, function (error, info) {
     if (error) {
       console.log(error);
     } else {
