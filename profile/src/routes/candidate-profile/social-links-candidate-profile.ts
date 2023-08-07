@@ -1,6 +1,6 @@
 import { currentUser, requireAuth, validateRequest } from "@naukri-clone/common";
 import express, { Request, Response } from "express";
-import { body } from 'express-validator';
+import { body, oneOf } from 'express-validator';
 import { natsWrapper } from "../../nats-wrapper";
 import { checkIfProfileExistsandEmailIsVerified } from "../../middlewares/check-if-email-verified";
 import { CandidateProfileUpdatedPublisher } from "../../events/publishers/candidate-profile-updated-publisher";
@@ -11,11 +11,26 @@ router.post("/api/profile/candidate-profile/social-links",
   requireAuth,
   checkIfProfileExistsandEmailIsVerified,
   [
-    body('instagram').optional().isURL().contains('instagram').withMessage("instagram should be a valid instagram url"), 
-    body('facebook').optional().isURL().contains('facebook').withMessage("facebook should be a valid facebook url"),
-    body('twitter').optional().isURL().contains('twitter').withMessage("twitter should be a valid twitter url"),
-    body('linkedin').optional().isURL().contains('linkedin').withMessage("linkedin should be a linkedin valid url"),
-    body('github').optional().isURL().contains('github').withMessage("github should be a github valid url"),
+    oneOf([
+      body('instagram').equals(""),
+      body('instagram').isURL().contains('instagram')
+    ],{ message: "instagram should contain a valid url"}),
+    oneOf([
+      body('facebook').equals(""),
+      body('facebook').isURL().contains('facebook')
+    ],{ message: "facebook should contain a valid url"}),
+    oneOf([
+      body('twitter').equals(""),
+      body('twitter').isURL().contains('twitter')
+    ],{ message: "twitter should contain a valid url"}),
+    oneOf([
+      body('linkedin').equals(""),
+      body('linkedin').isURL().contains('linkedin')
+    ],{ message: "linkedin should contain a valid url"}),
+    oneOf([
+      body('github').equals(""),
+      body('github').isURL().contains('github')
+    ],{ message: "github should contain a valid url"}),
   ],
   validateRequest,
   async (req: Request, res: Response) => {

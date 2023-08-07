@@ -9,6 +9,7 @@ import { addBasicInfoCandidateProfileRouter } from './routes/candidate-profile/b
 import { viewCandidateProfileRouter } from './routes/candidate-profile/view-candidate-profile';
 import { languageCandidateProfileRouter } from './routes/candidate-profile/languages-candidate-profile';
 import { socialLinksCandidateProfileRouter } from './routes/candidate-profile/social-links-candidate-profile';
+import { workExperienceCandidateProfileRouter } from './routes/candidate-profile/work-experience-candidate-profile';
 
 
 const app = express();
@@ -26,6 +27,7 @@ app.use(viewCandidateProfileRouter);
 app.use(addBasicInfoCandidateProfileRouter);
 app.use(languageCandidateProfileRouter)
 app.use(socialLinksCandidateProfileRouter);
+app.use(workExperienceCandidateProfileRouter);
 
 app.all("*", async (req, res, next) => {
   throw new NotFoundError()

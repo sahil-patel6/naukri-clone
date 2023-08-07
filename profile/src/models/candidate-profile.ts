@@ -143,7 +143,7 @@ const candidateProfileSchema = new mongoose.Schema({
       type: String,
       default: null
     },
-    linkedIn: {
+    linkedin: {
       type: String,
       default: null
     },
@@ -166,7 +166,7 @@ const candidateProfileSchema = new mongoose.Schema({
         type: String,
         required: true
       },
-      current_status: {
+      current_working_status: {
         type: Boolean,
         required: true,
       },

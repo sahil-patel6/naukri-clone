@@ -46,6 +46,13 @@ router.put("/api/profile/candidate-profile/languages/:id",
   requireAuth,
   checkIfProfileExistsandEmailIsVerified,
   param("id").isMongoId().withMessage("Please send a valid id"),
+  [
+    body('language_name').isString().withMessage("Language should not be empty"),
+    body('proficiency').isIn(['Beginner', 'Proficient', 'Expert']).withMessage("Proficiency can only contain ['Beginner', 'Proficient', 'Expert']"),
+    body('read').isBoolean().withMessage("Read must be a boolean value"),
+    body('write').isBoolean().withMessage('Write must be a boolean value'),
+    body('speak').isBoolean().withMessage('Speak must be a boolean value'),
+  ],
   validateRequest,
   async (req: Request, res: Response) => {
 
@@ -60,6 +67,7 @@ router.put("/api/profile/candidate-profile/languages/:id",
         language.read = req.body.read;
         language.write = req.body.write;
         language.speak = req.body.speak;
+        break;
       }
     }
 
