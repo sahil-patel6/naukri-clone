@@ -147,7 +147,7 @@ const candidateProfileSchema = new mongoose.Schema({
       type: String,
       default: null
     },
-    gitHub: {
+    github: {
       type: String,
       default: null
     }

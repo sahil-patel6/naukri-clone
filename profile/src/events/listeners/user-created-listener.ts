@@ -10,7 +10,6 @@ export class UserCreatedListener extends Listener<UserCreatedEvent>{
   queueGroupName = queueGroupName;
 
   async onMessage(data: UserCreatedEvent['data'], msg: Message) {
-    console.log(data);
 
     if (data.role === UserRole.CANDIDATE) {
       const candidateProfile = CandidateProfile.build({
