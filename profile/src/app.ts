@@ -10,6 +10,7 @@ import { viewCandidateProfileRouter } from './routes/candidate-profile/view-cand
 import { languageCandidateProfileRouter } from './routes/candidate-profile/languages-candidate-profile';
 import { socialLinksCandidateProfileRouter } from './routes/candidate-profile/social-links-candidate-profile';
 import { workExperienceCandidateProfileRouter } from './routes/candidate-profile/work-experience-candidate-profile';
+import { educationCandidateProfileRouter } from './routes/candidate-profile/education-candidate-profile';
 
 
 const app = express();
@@ -28,6 +29,7 @@ app.use(addBasicInfoCandidateProfileRouter);
 app.use(languageCandidateProfileRouter)
 app.use(socialLinksCandidateProfileRouter);
 app.use(workExperienceCandidateProfileRouter);
+app.use(educationCandidateProfileRouter);
 
 app.all("*", async (req, res, next) => {
   throw new NotFoundError()
