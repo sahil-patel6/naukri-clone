@@ -1,6 +1,8 @@
 import request from 'supertest';
 import { app } from '../../../app';
 import { UserRole } from '@naukri-clone/common';
+import { CandidateProfile } from '../../../models/candidate-profile';
+import { natsWrapper } from '../../../nats-wrapper';
 
 const basic_info = {
   name: "test",
@@ -26,25 +28,32 @@ it('sends 400 when email is not valid', async () => {
   return request(app)
     .post('/api/profile/candidate-profile/basic-info')
     .set('Cookie', await signin(UserRole.CANDIDATE))
-    .send({...basic_info,email:"asfasf"})
+    .send({ ...basic_info, email: "asfasf" })
     .expect(400);
 })
 
 it('adds basic-info to db', async () => {
-  
+
   const { body } = await request(app)
     .post('/api/profile/candidate-profile/basic-info')
     .set('Cookie', await signin(UserRole.CANDIDATE))
     .send(basic_info)
     .expect(200);
-    
-    expect(body.name).toBe(basic_info.name)
-    expect(body.email).toBe(basic_info.email)
-    expect(body.phone_number).toBe(basic_info.phone_number)
-    expect(body.bio).toBe(basic_info.bio)
-    expect(body.dob).toBe(basic_info.dob)
-    expect(body.gender).toBe(basic_info.gender)
-    expect(body.current_location).toBe(basic_info.current_location)
-    expect(body.preferred_work_location).toBe(basic_info.preferred_work_location)
-    expect(body.key_skills).toStrictEqual(basic_info.key_skills.split(","))
+
+  const candidateProfile = await CandidateProfile.findById(body.id);
+
+  if (!candidateProfile) {
+    throw new Error('candidate profile not found')
+  }
+
+  expect(candidateProfile.name).toBe(basic_info.name)
+  expect(candidateProfile.email).toBe(basic_info.email)
+  expect(candidateProfile.phone_number).toBe(basic_info.phone_number)
+  expect(candidateProfile.bio).toBe(basic_info.bio)
+  expect(candidateProfile.dob).toStrictEqual(new Date(basic_info.dob))
+  expect(candidateProfile.gender).toBe(basic_info.gender)
+  expect(candidateProfile.current_location).toBe(basic_info.current_location)
+  expect(candidateProfile.preferred_work_location).toBe(basic_info.preferred_work_location)
+  expect(candidateProfile.key_skills).toStrictEqual(basic_info.key_skills.split(","))
+  expect(natsWrapper.client.publish).toHaveBeenCalled()
 })
