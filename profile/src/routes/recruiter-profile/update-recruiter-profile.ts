@@ -8,7 +8,7 @@ import { UserUpdatedPublisher } from "../../events/publishers/user-updated-publi
 import { checkIfProfileExistsandEmailIsVerified } from "../../middlewares/check-if-email-verified";
 const router = express.Router();
 
-router.put("/api/profile/recruiter-profile/",
+router.post("/api/profile/recruiter-profile/",
   currentUser,
   requireAuth,
   checkIfProfileExistsandEmailIsVerified,
@@ -31,14 +31,15 @@ router.put("/api/profile/recruiter-profile/",
     }
 
     //@ts-ignore
-    const profileImagePath = req.files['profile_image'] ? req.files['profile_image'][0].path : null;
+    const profileImagePath = req.files && req.files['profile_image'] ? req.files['profile_image'][0].path : null;
     // @ts-ignore
-    const companyLogoImagePath = req.files['company_logo'] ? req.files['company_logo'][0].path : null;
+    const companyLogoImagePath = req.files && req.files['company_logo'] ? req.files['company_logo'][0].path : null;
     console.log(profileImagePath, companyLogoImagePath);
 
     req.recruiterProfile.name = req.body.name;
     req.recruiterProfile.email = req.body.email;
     req.recruiterProfile.phone_number = req.body.phone_number;
+    req.recruiterProfile.current_position = req.body.current_position;
     req.recruiterProfile.company_name = req.body.company_name;
     req.recruiterProfile.company_description = req.body.company_description;
     req.recruiterProfile.company_email = req.body.company_email;

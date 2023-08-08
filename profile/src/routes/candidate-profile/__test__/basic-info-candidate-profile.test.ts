@@ -6,7 +6,7 @@ import { natsWrapper } from '../../../nats-wrapper';
 
 const basic_info = {
   name: "test",
-  email: "jayey15550@v1zw.com",
+  email: "blah@blah.com",
   phone_number: "9878987678",
   bio: "I rock",
   dob: "2023-08-06T20:22:02.367Z",
