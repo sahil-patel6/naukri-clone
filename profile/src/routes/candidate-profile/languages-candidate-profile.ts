@@ -6,6 +6,20 @@ import { checkIfProfileExistsandEmailIsVerified } from "../../middlewares/check-
 import { CandidateProfileUpdatedPublisher } from "../../events/publishers/candidate-profile-updated-publisher";
 const router = express.Router();
 
+router.get("/api/profile/candidate-profile/languages",
+  currentUser,
+  requireAuth,
+  checkIfProfileExistsandEmailIsVerified,
+  async (req: Request, res: Response) => {
+
+    if (!req.candidateProfile) {
+      throw new Error('Something went wrong')
+    }
+
+    res.send({ languages: req.candidateProfile.languages });
+
+  })
+
 router.post("/api/profile/candidate-profile/languages",
   currentUser,
   requireAuth,
@@ -36,7 +50,7 @@ router.post("/api/profile/candidate-profile/languages",
       languages: req.candidateProfile.languages
     })
 
-    res.send(req.candidateProfile);
+    res.send({ languages: req.candidateProfile.languages });
 
   }
 )
@@ -83,7 +97,7 @@ router.put("/api/profile/candidate-profile/languages/:id",
       languages: req.candidateProfile.languages
     })
 
-    res.send(req.candidateProfile);
+    res.send({ languages: req.candidateProfile.languages });
 
   }
 )
@@ -119,7 +133,7 @@ router.delete("/api/profile/candidate-profile/languages/:id",
       languages: req.candidateProfile.languages
     })
 
-    res.send(req.candidateProfile);
+    res.send({message: "Language deleted successfully"});
 
   }
 )

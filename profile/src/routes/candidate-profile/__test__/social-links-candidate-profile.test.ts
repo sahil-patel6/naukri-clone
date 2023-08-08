@@ -29,13 +29,13 @@ it('sends 400 when instgram is not valid url', async () => {
 
 it('adds social-links to db', async () => {
 
-  const { body } = await request(app)
+  await request(app)
     .post('/api/profile/candidate-profile/social-links')
     .set('Cookie', await signin(UserRole.CANDIDATE))
     .send(social_links)
     .expect(200);
 
-  const candidateProfile = await CandidateProfile.findById(body.id);
+  const candidateProfile = await CandidateProfile.findOne({email:"blah@blah.com"});
 
   if (!candidateProfile) {
     throw new Error('candidate profile not found')

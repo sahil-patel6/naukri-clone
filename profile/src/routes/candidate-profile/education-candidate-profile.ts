@@ -6,6 +6,21 @@ import { checkIfProfileExistsandEmailIsVerified } from "../../middlewares/check-
 import { CandidateProfileUpdatedPublisher } from "../../events/publishers/candidate-profile-updated-publisher";
 const router = express.Router();
 
+router.get("/api/profile/candidate-profile/educations",
+  currentUser,
+  requireAuth,
+  checkIfProfileExistsandEmailIsVerified,
+  async (req: Request, res: Response) => {
+
+    if (!req.candidateProfile) {
+      throw new Error('Something went wrong')
+    }
+
+    res.send({ educations: req.candidateProfile.educations });
+
+  }
+)
+
 router.post("/api/profile/candidate-profile/education",
   currentUser,
   requireAuth,
@@ -35,7 +50,7 @@ router.post("/api/profile/candidate-profile/education",
       educations: req.candidateProfile.educations
     })
 
-    res.send(req.candidateProfile);
+    res.send({ educations: req.candidateProfile.educations });
 
   }
 )
@@ -83,7 +98,7 @@ router.put("/api/profile/candidate-profile/education/:id",
       educations: req.candidateProfile.educations
     })
 
-    res.send(req.candidateProfile);
+    res.send({ educations: req.candidateProfile.educations });
 
   }
 )
@@ -119,7 +134,7 @@ router.delete("/api/profile/candidate-profile/education/:id",
       educations: req.candidateProfile.educations
     })
 
-    res.send(req.candidateProfile);
+    res.send({ message: "Education deleted successfully" });
 
   }
 )

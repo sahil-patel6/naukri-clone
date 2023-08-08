@@ -6,6 +6,21 @@ import { checkIfProfileExistsandEmailIsVerified } from "../../middlewares/check-
 import { CandidateProfileUpdatedPublisher } from "../../events/publishers/candidate-profile-updated-publisher";
 const router = express.Router();
 
+router.get("/api/profile/candidate-profile/projects",
+  currentUser,
+  requireAuth,
+  checkIfProfileExistsandEmailIsVerified,
+  async (req: Request, res: Response) => {
+
+    if (!req.candidateProfile) {
+      throw new Error('Something went wrong')
+    }
+
+    res.send({ projects: req.candidateProfile.projects });
+
+  }
+)
+
 router.post("/api/profile/candidate-profile/projects",
   currentUser,
   requireAuth,
@@ -34,7 +49,7 @@ router.post("/api/profile/candidate-profile/projects",
       projects: req.candidateProfile.projects
     })
 
-    res.send(req.candidateProfile);
+    res.send({ projects: req.candidateProfile.projects });
 
   }
 )
@@ -77,7 +92,7 @@ router.put("/api/profile/candidate-profile/projects/:id",
       projects: req.candidateProfile.projects
     })
 
-    res.send(req.candidateProfile);
+    res.send({ projects: req.candidateProfile.projects });
 
   }
 )
@@ -113,7 +128,7 @@ router.delete("/api/profile/candidate-profile/projects/:id",
       projects: req.candidateProfile.projects
     })
 
-    res.send(req.candidateProfile);
+    res.send({message: "Project deleted successfully"});
 
   }
 )

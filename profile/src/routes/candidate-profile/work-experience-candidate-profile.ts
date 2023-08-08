@@ -6,6 +6,21 @@ import { checkIfProfileExistsandEmailIsVerified } from "../../middlewares/check-
 import { CandidateProfileUpdatedPublisher } from "../../events/publishers/candidate-profile-updated-publisher";
 const router = express.Router();
 
+router.get("/api/profile/candidate-profile/work-experience",
+  currentUser,
+  requireAuth,
+  checkIfProfileExistsandEmailIsVerified,
+  async (req: Request, res: Response) => {
+
+    if (!req.candidateProfile) {
+      throw new Error('Something went wrong')
+    }
+
+    res.send({ work_experiences: req.candidateProfile.work_experiences });
+
+  }
+)
+
 router.post("/api/profile/candidate-profile/work-experience/",
   currentUser,
   requireAuth,
@@ -18,7 +33,7 @@ router.post("/api/profile/candidate-profile/work-experience/",
     body('job_description').isLength({ min: 3 }).withMessage('Job Description must not be empty'),
     body('start_date').isISO8601().withMessage('Start date should be valid'),
     body('end_date').if(body('current_working_status').equals('true')).isISO8601().withMessage('End date should be valid'),
-    body('notice_period').if(body('current_working_status').equals('false')).isIn(['Serving Notice Period', 'Immediately available', '15 Days', '30 days', 'More than 30 days']).withMessage('Notice Period should be valid')
+    body('notice_period').isIn(['Serving Notice Period', 'Immediately Available', '15 Days', '30 Days', 'More than 30 Days']).withMessage('Notice Period should be valid')
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -39,7 +54,7 @@ router.post("/api/profile/candidate-profile/work-experience/",
       work_experiences: req.candidateProfile.work_experiences
     })
 
-    res.send(req.candidateProfile);
+    res.send({ work_experiences: req.candidateProfile.work_experiences });
 
   }
 )
@@ -57,7 +72,7 @@ router.put("/api/profile/candidate-profile/work-experience/:id",
     body('job_description').isLength({ min: 3 }).withMessage('Job Description must not be empty'),
     body('start_date').isISO8601().withMessage('Start date should be valid'),
     body('end_date').if(body('current_working_status').equals('true')).isISO8601().withMessage('End date should be valid'),
-    body('notice_period').if(body('current_working_status').equals('false')).isIn(['Serving Notice Period', 'Immediately available', '15 Days', '30 days', 'More than 30 days']).withMessage('Notice Period should be valid')
+    body('notice_period').isIn(['Serving Notice Period', 'Immediately Available', '15 Days', '30 Days', 'More than 30 Days']).withMessage('Notice Period should be valid')
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -98,7 +113,7 @@ router.put("/api/profile/candidate-profile/work-experience/:id",
       work_experiences: req.candidateProfile.work_experiences
     })
 
-    res.send(req.candidateProfile);
+    res.send({ work_experiences: req.candidateProfile.work_experiences });
 
   }
 )
@@ -134,7 +149,7 @@ router.delete("/api/profile/candidate-profile/work-experience/:id",
       work_experiences: req.candidateProfile.work_experiences
     })
 
-    res.send(req.candidateProfile);
+    res.send({message: "Work Experience deleted successfully"});
 
   }
 )

@@ -179,7 +179,7 @@ const candidateProfileSchema = new mongoose.Schema({
       },
       notice_period: {
         type: String,
-        enum: ['Serving Notice Period', 'Immediately available', '15 Days', '30 days', 'More than 30 days'],
+        enum: ['Serving Notice Period', 'Immediately Available', '15 Days', '30 Days', 'More than 30 Days'],
       },
       job_description: {
         type: String,
@@ -236,7 +236,7 @@ const candidateProfileSchema = new mongoose.Schema({
         required: true
       },
       project_status: {
-        type: String,
+        type: Boolean,
         required: true
       },
       description: {

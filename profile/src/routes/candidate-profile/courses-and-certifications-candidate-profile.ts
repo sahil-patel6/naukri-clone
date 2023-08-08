@@ -6,6 +6,21 @@ import { checkIfProfileExistsandEmailIsVerified } from "../../middlewares/check-
 import { CandidateProfileUpdatedPublisher } from "../../events/publishers/candidate-profile-updated-publisher";
 const router = express.Router();
 
+router.get("/api/profile/candidate-profile/courses-and-certifications",
+  currentUser,
+  requireAuth,
+  checkIfProfileExistsandEmailIsVerified,
+  async (req: Request, res: Response) => {
+
+    if (!req.candidateProfile) {
+      throw new Error('Something went wrong')
+    }
+
+    res.send({ courses_and_certifications: req.candidateProfile.courses_and_certifications });
+
+  }
+)
+
 router.post("/api/profile/candidate-profile/courses-and-certifications",
   currentUser,
   requireAuth,
@@ -35,7 +50,7 @@ router.post("/api/profile/candidate-profile/courses-and-certifications",
       courses_and_certifications: req.candidateProfile.courses_and_certifications
     })
 
-    res.send(req.candidateProfile);
+    res.send({ courses_and_certifications: req.candidateProfile.courses_and_certifications });
 
   }
 )
@@ -80,7 +95,7 @@ router.put("/api/profile/candidate-profile/courses-and-certifications/:id",
       courses_and_certifications: req.candidateProfile.courses_and_certifications
     })
 
-    res.send(req.candidateProfile);
+    res.send({ courses_and_certifications: req.candidateProfile.courses_and_certifications });
 
   }
 )
@@ -95,7 +110,7 @@ router.delete("/api/profile/candidate-profile/courses-and-certifications/:id",
     if (!req.candidateProfile) {
       throw new Error('Something went wrong')
     }
-    
+
     const course_and_certificate = req.candidateProfile.courses_and_certifications?.find((c) => c.id === req.params.id)
 
     if (!course_and_certificate) {
@@ -116,7 +131,7 @@ router.delete("/api/profile/candidate-profile/courses-and-certifications/:id",
       courses_and_certifications: req.candidateProfile.courses_and_certifications
     })
 
-    res.send(req.candidateProfile);
+    res.send({ message: "Course and Certification deleted successfully" });
 
   }
 )

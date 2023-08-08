@@ -41,7 +41,7 @@ global.signin = async (role: UserRole) => {
 
   if (role === UserRole.CANDIDATE){
     const candidateProfile = CandidateProfile.build({
-      email: "jayey15550@v1zw.com",
+      email: "blah@blah.com",
       name: "test",
       user_id: new mongoose.Types.ObjectId().toHexString(),
       isVerified: true,
