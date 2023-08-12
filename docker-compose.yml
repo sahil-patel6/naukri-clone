@@ -1,0 +1,71 @@
+services:
+  auth:
+    image: thesahilpatel/naukri-clone-auth
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    x-develop:
+      watch:
+        - action: sync
+          path: ./auth/src
+          target: ./app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_URI: mongodb://auth-mongo:27017/auth
+      NATS_CLIENT_ID: something
+      JWT_KEY: asdf
+      NATS_URL: http://nats-srv:4222
+      NATS_CLUSTER_ID: naukri-clone
+      EMAIL: saurabmia6@gmail.com
+    depends_on:
+      - auth-mongo
+  auth-mongo:
+    container_name: auth-mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ~/mongo:/data/db
+  nats-srv:
+    container_name: nats-srv
+    image: nats-streaming:0.17.0
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    command:
+      [
+        "-p",
+        "4222",
+        "-m",
+        "8222",
+        "-hbi",
+        "5s",
+        "-hbt",
+        "5s",
+        "-hbf",
+        "2",
+        "-SD",
+        "-cid",
+        "naukri-clone",
+      ]
+
+  # profile:
+  #   image: thesahilpatel/naukri-clone-profile
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     MONGO_URI: mongodb://profile-mongo:27017/profile
+  #     NATS_CLIENT_ID: somethingtoo
+  #   # depends_on:
+  #   #   - profile-mongo
+  # profile-mongo:
+  #   image: mongo
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - mongo-profile-db:/var/lib/mongo-profile

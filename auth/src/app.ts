@@ -10,14 +10,20 @@ import { signupRouter } from './routes/signup'
 import { errorHandler, NotFoundError } from '@naukri-clone/common';
 import { sendOTPRouter } from './routes/send-otp';
 import { verifyOTPRouter } from './routes/verfify-otp';
+import cors from 'cors';
 
 
 const app = express();
 app.set('trust proxy', true)
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true
+}))
 app.use(express.json());
 app.use(cookieSession({
   signed: false,
   secure: process.env.NODE_ENV !== 'test',
+  sameSite: 'none'
 }))
 
 app.use(currentUserRouter);
