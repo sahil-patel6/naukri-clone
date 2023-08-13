@@ -9,22 +9,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { addCurrentUser, signOutUser } from "@/lib/features/currentUserSlice";
 import { toast } from "./ui/use-toast";
-import { User, UserCircle } from "lucide-react";
+import { UserCircle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuGroup,
   DropdownMenuItem,
 } from "./ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
 function NavBar() {
   const currentUser = useSelector((state: RootState) => state.currentUser);
   const dispatch = useDispatch();
+
+  const router = useRouter();
 
   useEffect(() => {
     async function getCurrentUser() {
@@ -42,6 +42,7 @@ function NavBar() {
               role: response.data.currentUser.role,
               name: response.data.currentUser.name,
               isVerified: response.data.currentUser.isVerified,
+              isFetched: true,
             })
           );
         }
@@ -83,11 +84,11 @@ function NavBar() {
     dispatch(signOutUser());
   };
   return (
-    <div className="flex min-h-[50px] p-5 justify-between items-center">
-      <Link className="cursor-pointer text-md" href={"/"}>
+    <div className="flex min-h-[50px] p-3 justify-between items-center">
+      <Link className="cursor-pointer text-lg font-semibold" href={"/"}>
         Naukri Clone
       </Link>
-      <div className="flex gap-10">
+      <div className="flex gap-8">
         {currentUser.email ? (
           <>
             <DropdownMenu>
@@ -102,18 +103,16 @@ function NavBar() {
                   My Account ({currentUser.name})
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">
-                  Profile
-                </DropdownMenuItem>
+                <Link href={"/profile"}>
+                  <DropdownMenuItem className="cursor-pointer">
+                    Profile
+                  </DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem className="cursor-pointer" onClick={signout}>
                   Sign out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
-            {/* <Button variant={"secondary"} onClick={signout}>
-              Signout
-            </Button> */}
           </>
         ) : (
           <>

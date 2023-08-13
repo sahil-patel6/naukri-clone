@@ -86,7 +86,7 @@ export default function Register() {
   const router = useRouter();
 
   useEffect(() => {
-    if (currentUser.email) {
+    if (currentUser.email && currentUser.isFetched) {
       console.log("Already signed in my boy...");
       router.replace("/");
     }
@@ -116,6 +116,7 @@ export default function Register() {
           role: response.data.role,
           isVerified: response.data.isVerified,
           name: response.data.name,
+          isFetched: true,
         })
       );
       router.replace("/verify-otp");

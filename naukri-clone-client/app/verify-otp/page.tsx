@@ -43,17 +43,18 @@ export default function Register() {
   const router = useRouter();
 
   useEffect(() => {
-    if (currentUser.isVerified) {
+    if (currentUser.isFetched && currentUser.isVerified) {
       console.log("Already Verified");
       toast({
         title: "Your email is already verified",
         className: "bg-green-500",
         duration: 2000,
       });
-    } else {
+      router.replace("/")
+    } else if (currentUser.isFetched) {
       sendOTP();
     }
-  }, []);
+  }, [currentUser]);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     await verifyOTP(data);

@@ -7,5 +7,12 @@ export class API {
   static SIGNOUT_URL = `${this.BASE_URL}/users/signout`;
   static SEND_OTP_URL = `${this.BASE_URL}/users/send-otp`;
   static VERIFY_OTP_URL = `${this.BASE_URL}/users/verify-otp`;
+
+  // RECRUITER PROFILE
+  static GET_RECRUITER_PROFILE = `${this.BASE_URL}/profile/recruiter-profile`;
+
+  
+  // CANDIDATE PROFILE
+  static GET_CANDIDATE_PROFILE = `${this.BASE_URL}/profile/candidate-profile`;
 }
 

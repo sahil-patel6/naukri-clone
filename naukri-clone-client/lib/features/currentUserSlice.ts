@@ -1,12 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-enum UserRole {
+export enum UserRole {
   CANDIDATE = "CANDIDATE",
   RECRUITER = "RECRUITER"
 }
 
 export interface CurrentUser {
+  isFetched: boolean;
   id?: string;
   name?: string;
   email?: string;
@@ -14,7 +15,9 @@ export interface CurrentUser {
   role?: UserRole
 }
 
-const initialState: CurrentUser = {}
+const initialState: CurrentUser = {
+  isFetched: false
+}
 
 export const currentUser = createSlice({
   name: 'currentUser',

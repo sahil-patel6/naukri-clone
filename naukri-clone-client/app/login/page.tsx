@@ -64,7 +64,7 @@ export default function Register() {
 
   useEffect(() => {
     console.log(currentUser);
-    if (currentUser.email) {
+    if (currentUser.email && currentUser.isFetched) {
       console.log("User already signed in...");
       router.replace("/");
     }
@@ -93,6 +93,7 @@ export default function Register() {
           role: response.data.role,
           isVerified: response.data.isVerified,
           name: response.data.name,
+          isFetched: true,
         })
       );
       if (!response.data.isVerified) {

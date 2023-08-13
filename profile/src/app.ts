@@ -13,14 +13,20 @@ import { workExperienceCandidateProfileRouter } from './routes/candidate-profile
 import { educationCandidateProfileRouter } from './routes/candidate-profile/education-candidate-profile';
 import { coursesAndCertificationsCandidateProfileRouter } from './routes/candidate-profile/courses-and-certifications-candidate-profile';
 import { projectsCandidateProfileRouter } from './routes/candidate-profile/projects-candidate-profile';
+import cors from 'cors';
 
 
 const app = express();
 app.set('trust proxy', true)
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true
+}))
 app.use(express.json());
 app.use(cookieSession({
   signed: false,
   secure: process.env.NODE_ENV !== 'test',
+  sameSite: 'none'
 }))
 
 app.use(updateRecruiterProfileRouter)
