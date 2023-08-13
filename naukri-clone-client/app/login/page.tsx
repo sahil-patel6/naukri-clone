@@ -28,7 +28,7 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
-import { useDispatch, useSelector,  } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { addCurrentUser } from "@/lib/features/currentUserSlice";
 import { useEffect } from "react";
@@ -62,17 +62,13 @@ export default function Register() {
 
   const router = useRouter();
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(currentUser);
-    if(currentUser.email){
-      console.log("User already signed in...")
-      toast({
-        title: "Already signed in...",
-        className: "bg-green-500",
-        duration: 2000,
-      });
+    if (currentUser.email) {
+      console.log("User already signed in...");
+      router.replace("/");
     }
-  },[])
+  }, [currentUser]);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data);
@@ -100,7 +96,7 @@ export default function Register() {
         })
       );
       if (!response.data.isVerified) {
-        console.log("Going to somewhere")
+        console.log("Going to somewhere");
         router.push("/verify-otp");
       } else {
         router.push("/");

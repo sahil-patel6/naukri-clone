@@ -88,13 +88,9 @@ export default function Register() {
   useEffect(() => {
     if (currentUser.email) {
       console.log("Already signed in my boy...");
-      toast({
-        title: "Already signed in...",
-        className: "bg-green-500",
-        duration: 2000,
-      });
+      router.replace("/");
     }
-  }, []);
+  }, [currentUser]);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data);

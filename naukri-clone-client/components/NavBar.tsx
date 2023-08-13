@@ -9,6 +9,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { addCurrentUser, signOutUser } from "@/lib/features/currentUserSlice";
 import { toast } from "./ui/use-toast";
+import { User, UserCircle } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+} from "./ui/dropdown-menu";
 
 function NavBar() {
   const currentUser = useSelector((state: RootState) => state.currentUser);
@@ -17,12 +29,12 @@ function NavBar() {
   useEffect(() => {
     async function getCurrentUser() {
       try {
-        const response = await axios.get(API.CURRENT_USER_URL, {
-          httpsAgent: new https.Agent({ rejectUnauthorized: false }),
-          withCredentials: true,
-        });
-        console.log(response.data);
-        if (response.data.currentUser) {
+        if (!currentUser.email) {
+          const response = await axios.get(API.CURRENT_USER_URL, {
+            // httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+            withCredentials: true,
+          });
+          console.log(response.data);
           dispatch(
             addCurrentUser({
               id: response.data.currentUser.id,
@@ -77,9 +89,32 @@ function NavBar() {
       </Link>
       <div className="flex gap-10">
         {currentUser.email ? (
-          <Button variant={"secondary"} onClick={signout}>
-            Signout
-          </Button>
+          <>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <UserCircle
+                  size={40}
+                  className="self-center rounded-full p-[5px] hover:bg-[#1e293b]"
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>
+                  My Account ({currentUser.name})
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer">
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer" onClick={signout}>
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* <Button variant={"secondary"} onClick={signout}>
+              Signout
+            </Button> */}
+          </>
         ) : (
           <>
             <Button asChild variant={"secondary"}>
