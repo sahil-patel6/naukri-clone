@@ -3,7 +3,7 @@ import { API } from "@/lib/API";
 import { UserRole } from "@/lib/features/currentUserSlice";
 import axios from "axios";
 
-export async function getProfile(role: UserRole) {
+export async function getProfile(role: UserRole, setProfile: Function) {
   try {
     const response = await axios.get(
       role === UserRole.RECRUITER ?
@@ -12,7 +12,7 @@ export async function getProfile(role: UserRole) {
       { withCredentials: true }
     )
     console.log(response.data)
-
+    setProfile(response.data)
   } catch (err: any) {
     const errors = err?.response?.data?.errors || null;
     if (errors) {

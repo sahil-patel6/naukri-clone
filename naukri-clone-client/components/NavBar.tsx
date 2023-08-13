@@ -35,16 +35,22 @@ function NavBar() {
             withCredentials: true,
           });
           console.log(response.data);
-          dispatch(
-            addCurrentUser({
-              id: response.data.currentUser.id,
-              email: response.data.currentUser.email,
-              role: response.data.currentUser.role,
-              name: response.data.currentUser.name,
-              isVerified: response.data.currentUser.isVerified,
-              isFetched: true,
-            })
-          );
+          if (response.data.currentUser){
+            dispatch(
+              addCurrentUser({
+                id: response.data.currentUser.id,
+                email: response.data.currentUser.email,
+                role: response.data.currentUser.role,
+                name: response.data.currentUser.name,
+                isVerified: response.data.currentUser.isVerified,
+                isFetched: true,
+              })
+            );
+          }else{
+            console.log("NOT SIGNED IN");
+            router.replace("/login")
+          }
+          
         }
       } catch (err: any) {
         const errors = err?.response?.data?.errors || null;
@@ -89,7 +95,7 @@ function NavBar() {
         Naukri Clone
       </Link>
       <div className="flex gap-8">
-        {currentUser.email ? (
+        {currentUser.isFetched && currentUser.email ? (
           <>
             <DropdownMenu>
               <DropdownMenuTrigger>
@@ -114,7 +120,7 @@ function NavBar() {
               </DropdownMenuContent>
             </DropdownMenu>
           </>
-        ) : (
+        ) : currentUser.isFetched && !currentUser.email ? (
           <>
             <Button asChild variant={"secondary"}>
               <Link href={"/login"}>Login</Link>
@@ -123,6 +129,8 @@ function NavBar() {
               <Link href={"/register"}>Register</Link>
             </Button>
           </>
+        ) : (
+          <></>
         )}
       </div>
     </div>
