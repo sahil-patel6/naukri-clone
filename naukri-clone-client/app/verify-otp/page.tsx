@@ -17,8 +17,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { sendOTP } from "./services/sendOTP";
-import { verifyOTP } from "./services/verifyOTP";
+import { sendOTP } from "../../services/auth/sendOTP";
+import { verifyOTP } from "../../services/auth/verifyOTP";
 import { RootState } from "@/lib/store";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "@/components/ui/use-toast";
@@ -50,7 +50,7 @@ export default function Register() {
         className: "bg-green-500",
         duration: 2000,
       });
-      router.replace("/")
+      router.replace("/");
     } else if (currentUser.isFetched) {
       sendOTP();
     }

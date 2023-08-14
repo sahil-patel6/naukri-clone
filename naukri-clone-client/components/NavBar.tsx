@@ -4,12 +4,11 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import axios from "axios";
 import { API } from "@/lib/API";
-import https from "https";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { addCurrentUser, signOutUser } from "@/lib/features/currentUserSlice";
 import { toast } from "./ui/use-toast";
-import { UserCircle } from "lucide-react";
+import { LogOut, User, UserCircle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -19,6 +18,7 @@ import {
   DropdownMenuItem,
 } from "./ui/dropdown-menu";
 import { useRouter } from "next/navigation";
+import { signout } from "@/services/profile/signout";
 
 function NavBar() {
   const currentUser = useSelector((state: RootState) => state.currentUser);
@@ -28,14 +28,15 @@ function NavBar() {
 
   useEffect(() => {
     async function getCurrentUser() {
+      console.log("CALLED", currentUser);
       try {
-        if (!currentUser.email) {
+        if (!currentUser.isFetched && !currentUser.email) {
           const response = await axios.get(API.CURRENT_USER_URL, {
             // httpsAgent: new https.Agent({ rejectUnauthorized: false }),
             withCredentials: true,
           });
           console.log(response.data);
-          if (response.data.currentUser){
+          if (response.data.currentUser) {
             dispatch(
               addCurrentUser({
                 id: response.data.currentUser.id,
@@ -46,11 +47,14 @@ function NavBar() {
                 isFetched: true,
               })
             );
-          }else{
+          } else {
             console.log("NOT SIGNED IN");
-            router.replace("/login")
+            dispatch(
+              addCurrentUser({
+                isFetched: true,
+              })
+            );
           }
-          
         }
       } catch (err: any) {
         const errors = err?.response?.data?.errors || null;
@@ -74,21 +78,8 @@ function NavBar() {
     if (!currentUser.email) {
       getCurrentUser();
     }
-  }, []);
+  }, [currentUser]);
 
-  const signout = async (e: any) => {
-    e.preventDefault();
-    const response = await axios.post(
-      API.SIGNOUT_URL,
-      {},
-      {
-        httpsAgent: new https.Agent({ rejectUnauthorized: false }),
-        withCredentials: true,
-      }
-    );
-    console.log(response.data);
-    dispatch(signOutUser());
-  };
   return (
     <div className="flex min-h-[50px] p-3 justify-between items-center">
       <Link className="cursor-pointer text-lg font-semibold" href={"/"}>
@@ -111,11 +102,13 @@ function NavBar() {
                 <DropdownMenuSeparator />
                 <Link href={"/profile"}>
                   <DropdownMenuItem className="cursor-pointer">
-                    Profile
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
                   </DropdownMenuItem>
                 </Link>
                 <DropdownMenuItem className="cursor-pointer" onClick={signout}>
-                  Sign out
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Sign out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

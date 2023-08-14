@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getProfile } from "./services/get-profile";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { UserRole } from "@/lib/features/currentUserSlice";
 import ViewRecruiterProfile from "@/components/profile/recruiter-profile/view-recruiter-profile";
+import { getProfile } from "@/services/profile/get-profile";
 
 export default function Profile() {
   const currentUser = useSelector((state: RootState) => state.currentUser);
@@ -25,11 +25,11 @@ export default function Profile() {
   }, [currentUser]);
 
   const getProfileView = () => {
-    if (currentUser.isFetched && currentUser.role === UserRole.RECRUITER) {
+    if (currentUser.isFetched && currentUser.role === UserRole.RECRUITER && profile) {
       return <ViewRecruiterProfile profile={profile} />;
     } else if (
       currentUser.isFetched &&
-      currentUser.role === UserRole.CANDIDATE
+      currentUser.role === UserRole.CANDIDATE && profile
     ) {
       return <div>Candidate Profile</div>;
     } else {

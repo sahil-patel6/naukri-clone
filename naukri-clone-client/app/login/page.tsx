@@ -32,6 +32,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { addCurrentUser } from "@/lib/features/currentUserSlice";
 import { useEffect } from "react";
+import { error_handler } from "@/services/error-handler";
+import { LogIn } from "lucide-react";
 
 const FormSchema = z.object({
   email: z.string().email({
@@ -103,22 +105,7 @@ export default function Register() {
         router.push("/");
       }
     } catch (err: any) {
-      const errors = err?.response?.data?.errors || null;
-      if (errors) {
-        console.log(errors);
-        toast({
-          title: errors[0].message,
-          variant: "destructive",
-          duration: 2000,
-        });
-      } else {
-        toast({
-          title: "something went wrong!!",
-          variant: "destructive",
-          duration: 2000,
-        });
-      }
-      console.log(err);
+      error_handler(err);
     }
   }
 
@@ -140,7 +127,7 @@ export default function Register() {
                     placeholder="abc@abc.com"
                     {...field}
                     type="email"
-                    className="focus:border-2 focus:border-cyan-200"
+                    className="focus:border-2 focus:border-blue-600"
                   />
                 </FormControl>
                 <FormMessage />
@@ -158,7 +145,7 @@ export default function Register() {
                   <Input
                     {...field}
                     type="password"
-                    className="focus:border-2 focus:border-cyan-200"
+                    className="focus:border-2 focus:border-blue-600"
                   />
                 </FormControl>
                 <FormMessage />
@@ -176,7 +163,7 @@ export default function Register() {
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger className="focus:border-2 focus:border-cyan-200">
+                    <SelectTrigger className="focus:border-2 focus:border-blue-600">
                       <SelectValue placeholder="Select a type of User" />
                     </SelectTrigger>
                   </FormControl>
@@ -189,14 +176,18 @@ export default function Register() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
-            Login
+          <Button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white"
+          >
+            <LogIn className="mr-2 h-4 w-4" />
+            <span>Login</span>
           </Button>
           <p>
             {" "}
             Don't have an account yet?{" "}
             <Link href={"/register"} className="text-blue-600">
-              Register
+              <span>Register</span>
             </Link>{" "}
             here
           </p>
