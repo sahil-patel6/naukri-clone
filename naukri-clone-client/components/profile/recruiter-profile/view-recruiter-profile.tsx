@@ -27,7 +27,7 @@ export default function ViewRecruiterProfile({
       <>
         <div className="container mt-5">
           <p className="text-2xl mb-5 font-semibold">Your Details:</p>
-          <div className="flex flex-col md:flex-row gap-x-10 items-cente bg-gray-900 px-10 py-6 rounded-lg text-white">
+          <div className="flex flex-col md:flex-row gap-x-10 items-cente bg-gray-900 px-10 py-5 rounded-lg text-white">
             {/* <Image
               src={profile.profile_image}
               width={200}
@@ -37,9 +37,11 @@ export default function ViewRecruiterProfile({
               className="rounded-full"
               style={{ objectFit: "cover" }}
             /> */}
-            <Avatar className="w-[200px] h-[200px]">
+            <Avatar className="w-[160px] h-[160px] self-center">
               <AvatarImage src={profile.profile_image} />
-              <AvatarFallback>{profile.name}</AvatarFallback>
+              <AvatarFallback className="text-8xl">
+                {profile.name.split(" ").map((word) => word[0])}
+              </AvatarFallback>
             </Avatar>
 
             <div className="flex flex-col gap-5 text-xl mt-10 md:mt-0 ">
@@ -62,7 +64,7 @@ export default function ViewRecruiterProfile({
             </div>
           </div>
           <p className="text-2xl my-5 font-semibold">Your Company Details:</p>
-          <div className="flex flex-col md:flex-row gap-x-10 items-center bg-gray-900 px-10 py-6 rounded-lg text-white">
+          <div className="flex flex-col md:flex-row gap-x-10 items-center bg-gray-900 px-10 py-5 rounded-lg text-white">
             {/* <Image
               src={profile.company_logo}
               width={200}
@@ -74,9 +76,11 @@ export default function ViewRecruiterProfile({
               // loader={}
               style={{ objectFit: "cover" }}
             /> */}
-            <Avatar className="w-[200px] h-[200px]">
+            <Avatar className="w-[160px] h-[160px] self-center">
               <AvatarImage src={profile.company_logo} />
-              <AvatarFallback>{profile.company_name}</AvatarFallback>
+              <AvatarFallback className="text-8xl">
+                {profile.company_name.split(" ").map((word) => word[0].toUpperCase())}
+              </AvatarFallback>
             </Avatar>
 
             <div className="flex flex-col gap-5 text-xl mt-10 md:mt-0">
