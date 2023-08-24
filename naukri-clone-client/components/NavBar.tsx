@@ -19,6 +19,7 @@ import {
 } from "./ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import { signout } from "@/services/profile/signout";
+import { error_handler } from "@/services/error-handler";
 
 function NavBar() {
   const currentUser = useSelector((state: RootState) => state.currentUser);
@@ -57,22 +58,7 @@ function NavBar() {
           }
         }
       } catch (err: any) {
-        const errors = err?.response?.data?.errors || null;
-        if (errors) {
-          console.log(errors);
-          toast({
-            title: errors[0].message,
-            variant: "destructive",
-            duration: 2000,
-          });
-        } else {
-          toast({
-            title: "something went wrong!!",
-            variant: "destructive",
-            duration: 2000,
-          });
-        }
-        console.log(err);
+        error_handler(err);
       }
     }
     if (!currentUser.email) {
@@ -81,7 +67,7 @@ function NavBar() {
   }, [currentUser]);
 
   return (
-    <div className="flex min-h-[50px] p-3 justify-between items-center">
+    <div className="flex min-h-[50px] p-3 justify-between items-center  ">
       <Link className="cursor-pointer text-lg font-semibold" href={"/"}>
         Naukri Clone
       </Link>

@@ -45,11 +45,11 @@ export default function Register() {
   useEffect(() => {
     if (currentUser.isFetched && currentUser.isVerified) {
       console.log("Already Verified");
-      toast({
-        title: "Your email is already verified",
-        className: "bg-green-500",
-        duration: 2000,
-      });
+      // toast({
+      //   title: "Your email is already verified",
+      //   className: "bg-green-500",
+      //   duration: 2000,
+      // });
       router.replace("/");
     } else if (currentUser.isFetched) {
       sendOTP();

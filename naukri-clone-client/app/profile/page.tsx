@@ -7,6 +7,9 @@ import { useRouter } from "next/navigation";
 import { UserRole } from "@/lib/features/currentUserSlice";
 import ViewRecruiterProfile from "@/components/profile/recruiter-profile/view-recruiter-profile";
 import { getProfile } from "@/services/profile/get-profile";
+import { Loader2 } from "lucide-react";
+import LoadingSkeleton from "@/components/profile/recruiter-profile/loading-skeleton";
+import { RecruiterProfileProps } from "@/components/profile/recruiter-profile/recruiter-profile-props";
 
 export default function Profile() {
   const currentUser = useSelector((state: RootState) => state.currentUser);
@@ -24,16 +27,28 @@ export default function Profile() {
     }
   }, [currentUser]);
 
+  const updateProfile = (profile: any) => {
+    setProfile(profile);
+  };
+
   const getProfileView = () => {
-    if (currentUser.isFetched && currentUser.role === UserRole.RECRUITER && profile) {
-      return <ViewRecruiterProfile profile={profile} />;
+    // return <LoadingSkeleton/>
+    if (
+      currentUser.isFetched &&
+      currentUser.role === UserRole.RECRUITER &&
+      profile
+    ) {
+      return (
+        <ViewRecruiterProfile profile={profile} updateProfile={updateProfile} />
+      );
     } else if (
       currentUser.isFetched &&
-      currentUser.role === UserRole.CANDIDATE && profile
+      currentUser.role === UserRole.CANDIDATE &&
+      profile
     ) {
       return <div>Candidate Profile</div>;
     } else {
-      return <div>Loading...</div>;
+      return <LoadingSkeleton />;
     }
   };
 

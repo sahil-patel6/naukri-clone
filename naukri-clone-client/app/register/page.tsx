@@ -111,6 +111,7 @@ export default function Register() {
         }
       );
       console.log(response.data);
+      router.replace("/verify-otp");
       dispatch(
         addCurrentUser({
           id: response.data.id,
@@ -121,7 +122,6 @@ export default function Register() {
           isFetched: true,
         })
       );
-      router.replace("/verify-otp");
     } catch (err: any) {
       error_handler(err);
     }
