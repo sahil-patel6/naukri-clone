@@ -134,7 +134,7 @@ export default function EditBasicRecruiterProfileModal({
             onClick={() => {}}
           />
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="overflow-y-auto max-h-screen">
           <DialogHeader>
             <DialogTitle>Edit Your Basic Information</DialogTitle>
           </DialogHeader>

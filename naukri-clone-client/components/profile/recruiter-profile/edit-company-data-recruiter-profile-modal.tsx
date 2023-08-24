@@ -61,7 +61,7 @@ export default function EditCompanyDataRecruiterProfileModal({
   updateProfile,
 }: {
   profile: RecruiterProfileProps;
-  updateProfile: Function
+  updateProfile: Function;
 }) {
   const router = useRouter();
 
@@ -113,7 +113,7 @@ export default function EditCompanyDataRecruiterProfileModal({
       );
       console.log(response.data, "YE");
       setIsOpen(false);
-      updateProfile(response.data)
+      updateProfile(response.data);
       toast({
         title: "Profile Updated Successfully",
         className: "bg-green-500",
@@ -133,129 +133,130 @@ export default function EditCompanyDataRecruiterProfileModal({
   };
 
   return (
-    <ScrollArea>
-      <Dialog open={isOpen} onOpenChange={onModalChange}>
-        <DialogTrigger className="h-fit">
-          <Pencil
-            className=" h-10 w-10 text-right hover:bg-gray-800 p-2 rounded-2xl text-white"
-            onClick={() => {}}
-          />
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit Your Company Information</DialogTitle>
-          </DialogHeader>
-          <div className="flex justify-center items-center">
-            <Avatar
-              className=" flex-2 md:flex-none w-[160px] h-[160px] cursor-pointer"
-              onClick={() => {
-                document.getElementById("picture")?.click();
-              }}
-            >
-              <AvatarImage
-                src={
-                  pickedCompanyLogo
-                    ? URL.createObjectURL(pickedCompanyLogo)
-                    : profile.company_logo
-                }
-              />
-              <AvatarFallback className="text-8xl">
-                {profile.company_name
-                  ? profile.company_name
-                      .split(" ")
-                      .map((word) => word[0].toUpperCase())
-                  : "C"}
-              </AvatarFallback>
-            </Avatar>
-            <Input
-              id="picture"
-              type="file"
-              className="hidden"
-              onChange={handleCompanyLogoChange}
+    <Dialog
+      open={isOpen}
+      onOpenChange={onModalChange}
+    >
+      <DialogTrigger className="h-fit">
+        <Pencil
+          className=" h-10 w-10 text-right hover:bg-gray-800 p-2 rounded-2xl text-white"
+          onClick={() => {}}
+        />
+      </DialogTrigger>
+      <DialogContent className="overflow-y-auto max-h-screen">
+        <DialogHeader>
+          <DialogTitle>Edit Your Company Information</DialogTitle>
+        </DialogHeader>
+        <div className="flex justify-center items-center">
+          <Avatar
+            className=" flex-2 md:flex-none w-[160px] h-[160px] cursor-pointer"
+            onClick={() => {
+              document.getElementById("picture")?.click();
+            }}
+          >
+            <AvatarImage
+              src={
+                pickedCompanyLogo
+                  ? URL.createObjectURL(pickedCompanyLogo)
+                  : profile.company_logo
+              }
             />
-          </div>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full space-y-3"
-            >
-              <FormField
-                control={form.control}
-                name="company_name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Company Name: </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Google"
-                        {...field}
-                        type="text"
-                        className="focus:border-2 focus:border-blue-600"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <AvatarFallback className="text-8xl">
+              {profile.company_name
+                ? profile.company_name
+                    .split(" ")
+                    .map((word) => word[0].toUpperCase())
+                : "C"}
+            </AvatarFallback>
+          </Avatar>
+          <Input
+            id="picture"
+            type="file"
+            className="hidden"
+            onChange={handleCompanyLogoChange}
+          />
+        </div>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-full space-y-3"
+          >
+            <FormField
+              control={form.control}
+              name="company_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Company Name: </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Google"
+                      {...field}
+                      type="text"
+                      className="focus:border-2 focus:border-blue-600"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="company_description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Company Description: </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Tell us a little bit about your company"
-                        className="resize-none focus:border-2 focus:border-blue-600"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="company_description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Company Description: </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Tell us a little bit about your company"
+                      className="resize-none focus:border-2 focus:border-blue-600"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="company_address"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Company Address: </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Tell us your company address"
-                        className="resize-none focus:border-2 focus:border-blue-600"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+            <FormField
+              control={form.control}
+              name="company_address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Company Address: </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Tell us your company address"
+                      className="resize-none focus:border-2 focus:border-blue-600"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <DialogFooter>
+              <Button
+                className="text-center  text-white bg-blue-600 hover:bg-blue-500"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <span>Updating...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    <span>Save Changes</span>
+                  </>
                 )}
-              />
-              <DialogFooter>
-                <Button
-                  className="text-center  text-white bg-blue-600 hover:bg-blue-500"
-                  type="submit"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      <span>Updating...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Save className="mr-2 h-4 w-4" />
-                      <span>Save Changes</span>
-                    </>
-                  )}
-                </Button>
-              </DialogFooter>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-    </ScrollArea>
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }
