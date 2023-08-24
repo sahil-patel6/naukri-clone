@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <main className="container">
-      <h1 className="text-4xl text-center">
+      <h1 className="text-center text-4xl">
         {currentUser.email
           ? `You are signed in and here is your email : ${currentUser.email}`
           : "You are not signed in"}

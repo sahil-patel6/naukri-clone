@@ -63,7 +63,7 @@ export default function Register() {
   }
 
   return (
-    <div className="container flex flex-col justify-center items-center h-full">
+    <div className="container flex h-full flex-col items-center justify-center">
       <p>Verify your email:</p>
       <Form {...form}>
         <form
@@ -95,7 +95,7 @@ export default function Register() {
             {" "}
             Didn't got the otp yet? Try{" "}
             <span
-              className="text-blue-600 cursor-pointer"
+              className="cursor-pointer text-blue-600"
               onClick={() => {
                 sendOTP();
               }}

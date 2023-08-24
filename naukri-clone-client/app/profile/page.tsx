@@ -8,7 +8,7 @@ import { UserRole } from "@/lib/features/currentUserSlice";
 import ViewRecruiterProfile from "@/components/profile/recruiter-profile/view-recruiter-profile";
 import { getProfile } from "@/services/profile/get-profile";
 import { Loader2 } from "lucide-react";
-import LoadingSkeleton from "@/components/profile/recruiter-profile/loading-skeleton";
+import RecruiterProfileLoadingSkeleton from "@/components/profile/recruiter-profile/recruiter-profile-loading-skeleton";
 import { RecruiterProfileProps } from "@/components/profile/recruiter-profile/recruiter-profile-props";
 
 export default function Profile() {
@@ -47,8 +47,18 @@ export default function Profile() {
       profile
     ) {
       return <div>Candidate Profile</div>;
+    } else if (
+      currentUser.isFetched &&
+      currentUser.role === UserRole.RECRUITER
+    ) {
+      return <RecruiterProfileLoadingSkeleton />;
+    } else if (
+      currentUser.isFetched &&
+      currentUser.role === UserRole.CANDIDATE
+    ) {
+      return <p>Candidate Profile Loading</p>;
     } else {
-      return <LoadingSkeleton />;
+      return <p>Loading</p>;
     }
   };
 

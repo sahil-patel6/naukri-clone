@@ -108,7 +108,7 @@ export default function Register() {
         {
           httpsAgent: new https.Agent({ rejectUnauthorized: false }),
           withCredentials: true,
-        }
+        },
       );
       console.log(response.data);
       router.replace("/verify-otp");
@@ -120,7 +120,7 @@ export default function Register() {
           isVerified: response.data.isVerified,
           name: response.data.name,
           isFetched: true,
-        })
+        }),
       );
     } catch (err: any) {
       error_handler(err);
@@ -128,7 +128,7 @@ export default function Register() {
   }
 
   return (
-    <div className="container flex justify-center items-center h-full">
+    <div className="container flex h-full items-center justify-center">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -230,7 +230,7 @@ export default function Register() {
           />
           <Button
             type="submit"
-            className="w-full focus:border-2 text-white bg-blue-600 hover:bg-blue-500"
+            className="w-full bg-blue-600 text-white hover:bg-blue-500 focus:border-2"
           >
             <LogIn className="mr-2 h-4 w-4" />
             <span>Register</span>

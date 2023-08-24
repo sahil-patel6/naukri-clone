@@ -17,8 +17,8 @@ export default function ViewRecruiterProfile({
     return (
       <>
         <div className="container mt-5">
-          <p className="text-2xl mb-5 font-semibold">Your Details:</p>
-          <div className="flex flex-col items-center justify-center md:flex-row gap-x-10 bg-gray-900 pl-10 pr-2 py-5 rounded-lg text-white border-4">
+          <p className="mb-5 text-2xl font-semibold">Your Details:</p>
+          <div className="flex flex-col items-center justify-center gap-x-10 rounded-lg border-4 bg-gray-900 py-5 pl-10 pr-2 text-white md:flex-row">
             {/* <Image
               src={profile.profile_image}
               width={200}
@@ -28,21 +28,24 @@ export default function ViewRecruiterProfile({
               className="rounded-full"
               style={{ objectFit: "cover" }}
             /> */}
-            <div className="flex flex-row justify-between w-full md:w-fit">
+            <div className="flex w-full flex-row justify-between md:w-fit">
               <div className="flex-1"></div>
-              <Avatar className=" flex-2 md:flex-none w-[160px] h-[160px]">
+              <Avatar className=" flex-2 h-[160px] w-[160px] md:flex-none">
                 <AvatarImage src={profile.profile_image} />
                 <AvatarFallback className="text-8xl">
                   {profile.name.split(" ").map((word) => word[0])}
                 </AvatarFallback>
               </Avatar>
 
-              <div className="flex flex-1 md:hidden flex-row justify-end">
-                <EditBasicRecruiterProfileModal profile={profile} updateProfile={updateProfile}/>
+              <div className="flex flex-1 flex-row justify-end md:hidden">
+                <EditBasicRecruiterProfileModal
+                  profile={profile}
+                  updateProfile={updateProfile}
+                />
               </div>
             </div>
 
-            <div className="flex flex-col gap-5 text-xl mt-10 md:mt-0 mr-5">
+            <div className="mr-5 mt-10 flex flex-col gap-5 text-xl md:mt-0">
               <p>
                 <span className="font-semibold">Name: </span>
                 {profile.name}
@@ -60,12 +63,15 @@ export default function ViewRecruiterProfile({
                 {profile.current_position ? profile.current_position : "NA"}
               </p>
             </div>
-            <div className="flex-1 hidden md:flex flex-row justify-end items-center cursor-pointer">
-              <EditBasicRecruiterProfileModal profile={profile} updateProfile={updateProfile}/>
+            <div className="hidden flex-1 cursor-pointer flex-row items-center justify-end md:flex">
+              <EditBasicRecruiterProfileModal
+                profile={profile}
+                updateProfile={updateProfile}
+              />
             </div>
           </div>
-          <p className="text-2xl my-5 font-semibold">Your Company Details:</p>
-          <div className="flex flex-col items-center justify-center md:flex-row gap-x-10 bg-gray-900 pl-10 pr-2 py-5 rounded-lg text-white border-4">
+          <p className="my-5 text-2xl font-semibold">Your Company Details:</p>
+          <div className="flex flex-col items-center justify-center gap-x-10 rounded-lg border-4 bg-gray-900 py-5 pl-10 pr-2 text-white md:flex-row">
             {/* <Image
               src={profile.profile_image}
               width={200}
@@ -75,9 +81,9 @@ export default function ViewRecruiterProfile({
               className="rounded-full"
               style={{ objectFit: "cover" }}
             /> */}
-            <div className="flex flex-row justify-between w-full md:w-fit">
+            <div className="flex w-full flex-row justify-between md:w-fit">
               <div className="flex-1"></div>
-              <Avatar className=" flex-2 md:flex-none w-[160px] h-[160px]">
+              <Avatar className=" flex-2 h-[160px] w-[160px] md:flex-none">
                 <AvatarImage src={profile.company_logo} />
                 <AvatarFallback className="text-8xl">
                   {profile.company_name
@@ -88,12 +94,15 @@ export default function ViewRecruiterProfile({
                 </AvatarFallback>
               </Avatar>
 
-              <div className="flex flex-1 md:hidden flex-row justify-end">
-                <EditCompanyDataRecruiterProfileModal profile={profile} updateProfile={updateProfile}/>
+              <div className="flex flex-1 flex-row justify-end md:hidden">
+                <EditCompanyDataRecruiterProfileModal
+                  profile={profile}
+                  updateProfile={updateProfile}
+                />
               </div>
             </div>
 
-            <div className="flex flex-col gap-5 text-xl mt-10 md:mt-0 mr-5 ">
+            <div className="mr-5 mt-10 flex flex-col gap-5 text-xl md:mt-0 ">
               <p>
                 <span className="font-semibold">Name: </span>
                 {profile.company_name ? profile.company_name : "NA"}
@@ -113,14 +122,17 @@ export default function ViewRecruiterProfile({
                 </span>
               </p>
             </div>
-            <div className="flex-1 hidden md:flex flex-row justify-end items-center cursor-pointer">
-              <EditCompanyDataRecruiterProfileModal profile={profile} updateProfile={updateProfile}/>
+            <div className="hidden flex-1 cursor-pointer flex-row items-center justify-end md:flex">
+              <EditCompanyDataRecruiterProfileModal
+                profile={profile}
+                updateProfile={updateProfile}
+              />
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center justify-center my-10">
+          <div className="my-10 flex flex-col items-center justify-center md:flex-row">
             <Button
-              className="text-center  text-white bg-blue-600 hover:bg-blue-500 md:w-1/4"
+              className="bg-blue-600  text-center text-white hover:bg-blue-500 md:w-1/4"
               onClick={signout}
             >
               <LogOut className="mr-2 h-4 w-4" />

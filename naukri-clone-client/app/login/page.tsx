@@ -85,7 +85,7 @@ export default function Register() {
         {
           httpsAgent: new https.Agent({ rejectUnauthorized: false }),
           withCredentials: true,
-        }
+        },
       );
       console.log(response.data);
       dispatch(
@@ -96,7 +96,7 @@ export default function Register() {
           isVerified: response.data.isVerified,
           name: response.data.name,
           isFetched: true,
-        })
+        }),
       );
       if (!response.data.isVerified) {
         console.log("Going to somewhere");
@@ -110,7 +110,7 @@ export default function Register() {
   }
 
   return (
-    <div className="container flex flex-col justify-center items-center h-full">
+    <div className="container flex h-full flex-col items-center justify-center">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -178,7 +178,7 @@ export default function Register() {
           />
           <Button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white"
+            className="w-full bg-blue-600 text-white hover:bg-blue-500"
           >
             <LogIn className="mr-2 h-4 w-4" />
             <span>Login</span>

@@ -46,14 +46,14 @@ function NavBar() {
                 name: response.data.currentUser.name,
                 isVerified: response.data.currentUser.isVerified,
                 isFetched: true,
-              })
+              }),
             );
           } else {
             console.log("NOT SIGNED IN");
             dispatch(
               addCurrentUser({
                 isFetched: true,
-              })
+              }),
             );
           }
         }
@@ -67,7 +67,7 @@ function NavBar() {
   }, [currentUser]);
 
   return (
-    <div className="flex min-h-[50px] p-3 justify-between items-center  ">
+    <div className="flex min-h-[60px] items-center justify-between p-3  ">
       <Link className="cursor-pointer text-lg font-semibold" href={"/"}>
         Naukri Clone
       </Link>

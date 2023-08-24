@@ -50,7 +50,7 @@ export default function EditBasicRecruiterProfileModal({
   updateProfile,
 }: {
   profile: RecruiterProfileProps;
-  updateProfile: Function
+  updateProfile: Function;
 }) {
   const router = useRouter();
 
@@ -58,7 +58,7 @@ export default function EditBasicRecruiterProfileModal({
   const [isLoading, setIsLoading] = useState(false);
 
   const [pickedProfileImage, setPickedProfileImage] = useState<File | null>(
-    null
+    null,
   );
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -102,11 +102,11 @@ export default function EditBasicRecruiterProfileModal({
         {
           withCredentials: true,
           headers: { "Content-Type": "multipart/form-data" },
-        }
+        },
       );
       console.log(response.data, "YE");
       setIsOpen(false);
-      updateProfile(response.data)
+      updateProfile(response.data);
       toast({
         title: "Profile Updated Successfully",
         className: "bg-green-500",
@@ -130,17 +130,17 @@ export default function EditBasicRecruiterProfileModal({
       <Dialog open={isOpen} onOpenChange={onModalChange}>
         <DialogTrigger className="h-fit">
           <Pencil
-            className=" h-10 w-10 text-right hover:bg-gray-800 p-2 rounded-2xl text-white"
+            className=" h-10 w-10 rounded-2xl p-2 text-right text-white hover:bg-gray-800"
             onClick={() => {}}
           />
         </DialogTrigger>
-        <DialogContent className="overflow-y-auto max-h-screen">
+        <DialogContent className="max-h-screen overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Edit Your Basic Information</DialogTitle>
           </DialogHeader>
-          <div className="flex justify-center items-center">
+          <div className="flex items-center justify-center">
             <Avatar
-              className=" flex-2 md:flex-none w-[160px] h-[160px] cursor-pointer"
+              className=" flex-2 h-[160px] w-[160px] cursor-pointer md:flex-none"
               onClick={() => {
                 document.getElementById("picture")?.click();
               }}
@@ -224,7 +224,7 @@ export default function EditBasicRecruiterProfileModal({
               />
               <DialogFooter>
                 <Button
-                  className="text-center  text-white bg-blue-600 hover:bg-blue-500"
+                  className="bg-blue-600  text-center text-white hover:bg-blue-500"
                   type="submit"
                   disabled={isLoading}
                 >
