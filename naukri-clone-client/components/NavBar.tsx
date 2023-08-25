@@ -6,7 +6,11 @@ import axios from "axios";
 import { API } from "@/lib/API";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-import { addCurrentUser, signOutUser } from "@/lib/features/currentUserSlice";
+import {
+  UserRole,
+  addCurrentUser,
+  signOutUser,
+} from "@/lib/features/currentUserSlice";
 import { toast } from "./ui/use-toast";
 import { LogOut, User, UserCircle } from "lucide-react";
 import {
@@ -20,6 +24,8 @@ import {
 import { useRouter } from "next/navigation";
 import { signout } from "@/services/profile/signout";
 import { error_handler } from "@/services/error-handler";
+import { getProfile } from "@/services/profile/get-profile";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 function NavBar() {
   const currentUser = useSelector((state: RootState) => state.currentUser);
@@ -36,16 +42,27 @@ function NavBar() {
             // httpsAgent: new https.Agent({ rejectUnauthorized: false }),
             withCredentials: true,
           });
+
           console.log(response.data);
           if (response.data.currentUser) {
+            const { data: profile } = await axios.get(
+              response.data.currentUser.role === UserRole.RECRUITER
+                ? API.GET_RECRUITER_PROFILE
+                : API.GET_CANDIDATE_PROFILE,
+              {
+                // httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+                withCredentials: true,
+              },
+            );
             dispatch(
               addCurrentUser({
                 id: response.data.currentUser.id,
                 email: response.data.currentUser.email,
                 role: response.data.currentUser.role,
-                name: response.data.currentUser.name,
+                name: profile.name,
                 isVerified: response.data.currentUser.isVerified,
                 isFetched: true,
+                profile_image: profile.profile_image,
               }),
             );
           } else {
@@ -76,10 +93,19 @@ function NavBar() {
           <>
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <UserCircle
-                  size={40}
-                  className="self-center rounded-full p-[5px] hover:bg-[#1e293b]"
-                />
+                {currentUser.profile_image ? (
+                  <Avatar className="h-[35px] w-[35px]">
+                    <AvatarImage src={currentUser.profile_image} />
+                    <AvatarFallback className="text-8xl">
+                      {currentUser.name?.split(" ").map((word) => word[0])}
+                    </AvatarFallback>
+                  </Avatar>
+                ) : (
+                  <UserCircle
+                    size={40}
+                    className="self-center rounded-full p-[5px] hover:bg-[#1e293b]"
+                  />
+                )}
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuLabel>

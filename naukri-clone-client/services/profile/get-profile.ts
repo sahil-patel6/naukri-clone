@@ -3,7 +3,7 @@ import { UserRole } from "@/lib/features/currentUserSlice";
 import axios from "axios";
 import { error_handler } from "../error-handler";
 
-export async function getProfile(role: UserRole, setProfile: Function) {
+export async function getProfile(role: UserRole)  {
   try {
     const response = await axios.get(
       role === UserRole.RECRUITER ?
@@ -12,7 +12,7 @@ export async function getProfile(role: UserRole, setProfile: Function) {
       { withCredentials: true }
     )
     console.log(response.data)
-    setProfile(response.data)
+    return response.data
   } catch (err: any) {
     error_handler(err)
   }

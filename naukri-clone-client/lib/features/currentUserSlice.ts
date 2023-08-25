@@ -13,6 +13,7 @@ export interface CurrentUser {
   email?: string;
   isVerified?: boolean;
   role?: UserRole
+  profile_image?: string;
 }
 
 const initialState: CurrentUser = {

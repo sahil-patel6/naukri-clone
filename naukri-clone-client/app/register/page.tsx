@@ -35,6 +35,7 @@ import { useEffect } from "react";
 import { addCurrentUser } from "@/lib/features/currentUserSlice";
 import { error_handler } from "@/services/error-handler";
 import { LogIn } from "lucide-react";
+import { API } from "@/lib/API";
 
 const FormSchema = z
   .object({
@@ -98,7 +99,7 @@ export default function Register() {
     console.log(data);
     try {
       const response = await axios.post(
-        "https://naukri.dev/api/users/signup",
+        API.SIGNUP_URL,
         {
           name: data.name,
           email: data.email,

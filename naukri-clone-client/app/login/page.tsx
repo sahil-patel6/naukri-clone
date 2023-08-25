@@ -30,10 +30,11 @@ import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-import { addCurrentUser } from "@/lib/features/currentUserSlice";
+import { UserRole, addCurrentUser } from "@/lib/features/currentUserSlice";
 import { useEffect } from "react";
 import { error_handler } from "@/services/error-handler";
 import { LogIn } from "lucide-react";
+import { API } from "@/lib/API";
 
 const FormSchema = z.object({
   email: z.string().email({
@@ -76,7 +77,7 @@ export default function Register() {
     console.log(data);
     try {
       const response = await axios.post(
-        "https://naukri.dev/api/users/signin",
+        API.SIGNIN_URL,
         {
           email: data.email,
           role: data.role,
@@ -87,6 +88,15 @@ export default function Register() {
           withCredentials: true,
         },
       );
+      const { data: profile } = await axios.get(
+        response.data.role === UserRole.RECRUITER
+          ? API.GET_RECRUITER_PROFILE
+          : API.GET_CANDIDATE_PROFILE,
+        {
+          // httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+          withCredentials: true,
+        },
+      );
       console.log(response.data);
       dispatch(
         addCurrentUser({
@@ -94,8 +104,9 @@ export default function Register() {
           email: response.data.email,
           role: response.data.role,
           isVerified: response.data.isVerified,
-          name: response.data.name,
+          name: profile.name,
           isFetched: true,
+          profile_image: profile.profile_image ?? undefined
         }),
       );
       if (!response.data.isVerified) {

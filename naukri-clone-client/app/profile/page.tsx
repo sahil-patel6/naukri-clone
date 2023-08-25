@@ -7,9 +7,8 @@ import { useRouter } from "next/navigation";
 import { UserRole } from "@/lib/features/currentUserSlice";
 import ViewRecruiterProfile from "@/components/profile/recruiter-profile/view-recruiter-profile";
 import { getProfile } from "@/services/profile/get-profile";
-import { Loader2 } from "lucide-react";
 import RecruiterProfileLoadingSkeleton from "@/components/profile/recruiter-profile/recruiter-profile-loading-skeleton";
-import { RecruiterProfileProps } from "@/components/profile/recruiter-profile/recruiter-profile-props";
+import ViewCandidateProfile from "@/components/profile/candidate-profile/view-candidate-profile";
 
 export default function Profile() {
   const currentUser = useSelector((state: RootState) => state.currentUser);
@@ -18,12 +17,18 @@ export default function Profile() {
 
   const router = useRouter();
 
+  const getP = async () => {
+    const profile = await getProfile(currentUser.role!);
+    console.log(profile);
+    setProfile(profile);
+  };
+
   useEffect(() => {
     if (!currentUser.email && currentUser.isFetched) {
       router.replace("/login");
     }
     if (currentUser.isFetched && !profile) {
-      getProfile(currentUser.role!, setProfile);
+      getP();
     }
   }, [currentUser]);
 
@@ -32,7 +37,6 @@ export default function Profile() {
   };
 
   const getProfileView = () => {
-    // return <LoadingSkeleton/>
     if (
       currentUser.isFetched &&
       currentUser.role === UserRole.RECRUITER &&
@@ -46,7 +50,9 @@ export default function Profile() {
       currentUser.role === UserRole.CANDIDATE &&
       profile
     ) {
-      return <div>Candidate Profile</div>;
+      return (
+        <ViewCandidateProfile profile={profile} updateProfile={updateProfile} />
+      );
     } else if (
       currentUser.isFetched &&
       currentUser.role === UserRole.RECRUITER
@@ -62,5 +68,5 @@ export default function Profile() {
     }
   };
 
-  return <div className="container flex flex-col">{getProfileView()}</div>;
+  return <div>{getProfileView()}</div>;
 }

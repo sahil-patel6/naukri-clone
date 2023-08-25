@@ -16,7 +16,7 @@ export default function ViewRecruiterProfile({
   if (profile) {
     return (
       <>
-        <div className="container mt-5">
+        <div className="container mt-5 flex flex-col">
           <p className="mb-5 text-2xl font-semibold">Your Details:</p>
           <div className="flex flex-col items-center justify-center gap-x-10 rounded-lg border-4 bg-gray-900 py-5 pl-10 pr-2 text-white md:flex-row">
             {/* <Image
